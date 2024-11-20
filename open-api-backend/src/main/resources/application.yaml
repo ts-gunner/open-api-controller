@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: open-api-controller
+  profiles:
+    active: dev
+
+server:
+  port: 8000
+
