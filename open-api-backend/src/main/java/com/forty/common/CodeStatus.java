@@ -4,6 +4,7 @@ public enum CodeStatus {
 
     SUCCESS(200, "Success"),
     PARAM_ERROR(400, "Param Error"),
+    DATA_NOT_EXIST(40301, "Data Not Exist"),
     NOT_LOGIN(401, "Not Login"),
     NO_AUTH(40100, "No Auth"),
     TOKEN_UNAVAILABLE(40101, "Token Unavailable"),

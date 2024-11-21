@@ -9,4 +9,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/openapi")
 public class InterfaceInfoController {
+
 }
