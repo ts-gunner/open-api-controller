@@ -11,7 +11,7 @@ import java.sql.Date;
 public class InterfaceInfo implements Serializable {
 
     @TableId(type= IdType.AUTO)
-    private int id;
+    private Integer id;
 
     /**
      * 接口名称

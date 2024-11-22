@@ -41,4 +41,27 @@ create table if not exists `user_info`
     `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) default charset=utf8mb4 comment '用户信息表';
 
+-- 用户角色表
+DROP TABLE IF EXISTS `user_role`;
+create table if not exists `user_role`
+(
+    role_id int auto_increment not null comment '角色id' primary key,
+    role_name varchar(256) not null comment '账号',
+    is_delete tinyint default 0 not null comment '是否删除',
+    `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) default charset=utf8mb4 comment '用户角色表';
 
+
+
+-- 用户 - 角色 一对多
+DROP TABLE IF EXISTS `role_assignment`;
+create table if not exists `role_assignment`
+(
+    id bigint auto_increment comment 'id' primary key,
+    role_id int not null comment '角色id',
+    user_id varchar(256) not null comment '用户id',
+    is_delete tinyint default 0 not null comment '是否删除',
+    `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) default charset=utf8mb4 comment '用户-角色映射表';

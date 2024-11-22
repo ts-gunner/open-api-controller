@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forty.mapper.RoleAssignmentMapper">
+
+    <resultMap id="RoleMapResult" type="com.forty.model.vo.RoleAssignmentVO">
+        <result property="roleId" column="role_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
+        <result property="userAccount" column="user_account" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+
+    <select id="getRoleAssignmentList" resultMap="RoleMapResult">
+      select
+          role_assignment.role_id as role_id, role_assignment.user_id as user_id,
+          user_info.user_account as user_account, user_role.role_name as role_name
+      from role_assignment
+      LEFT JOIN user_info ON user_info.id = role_assignment.user_id
+      LEFT JOIN user_role ON user_role.role_id = role_assignment.role_id;
+    </select>
+</mapper>

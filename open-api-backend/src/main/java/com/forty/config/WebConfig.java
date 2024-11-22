@@ -19,7 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
                 // open-api document
                 "/swagger-resources/**", "/webjars/**", "/v3/**", "/swagger-ui.html/**",
                 "/api", "/api-docs", "/api-docs/**", "/doc.html/**",
-                "/user/register", "/user/login"
+                "/user/register", "/user/login", "/"
         };
 
         registry.addInterceptor(authInterceptor)

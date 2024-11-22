@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "setting")
 public class Settings {
+
     private String salt;
 
     private String secretKey;

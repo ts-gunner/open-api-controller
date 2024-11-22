@@ -3,11 +3,12 @@ package com.forty.model.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 @Data
 @TableName("user_info")
-public class UserInfo {
+public class UserInfo implements Serializable {
 
     /**
      * 用户id，用户量不多，不需要考虑分库分表

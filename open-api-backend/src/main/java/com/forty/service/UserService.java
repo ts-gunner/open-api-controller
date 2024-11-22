@@ -1,8 +1,12 @@
 package com.forty.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.forty.model.dto.user.UserAddRequest;
+import com.forty.model.dto.user.UserQueryRequest;
 import com.forty.model.entity.UserInfo;
 import com.forty.model.vo.LoginUserVO;
+import com.forty.model.vo.UserVO;
 import org.apache.catalina.User;
 
 public interface UserService extends IService<UserInfo> {
@@ -21,4 +25,9 @@ public interface UserService extends IService<UserInfo> {
 
     LoginUserVO getLoginUserVO(UserInfo userInfo);
 
+    Page<UserVO> getUserVOList(UserQueryRequest request);
+
+    long addUserData(UserAddRequest userAddRequest);
+
+    void deleteUserData(Long userId);
 }

@@ -28,3 +28,22 @@ VO: Value Object， 可以理解为相应参数对象
 | httpclient5  | 5.2.1           | http请求                                                    |
 | fastjson2    | 2.0.53          | JSON操作                                                    |
 | knife4j      | 4.4.0           | open api文档                                       |
+| JJwt         | 0.12.5          | Jwt                                                      |
+
+
+# 业务特性
+
+1. 全局异常处理器（AOP）
+2. 全局请求拦截器（Interceptor）
+3. 自定义状态码
+4. 封装通用响应类
+5. Swagger + knife4j接口文档
+6. 多环境配置
+7. 用户鉴权
+8. 分页排序
+
+
+# 实现功能
+
+1. 用户创建
+2. 角色创建，授权，删除，查询
