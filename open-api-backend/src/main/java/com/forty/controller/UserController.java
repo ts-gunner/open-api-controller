@@ -14,16 +14,12 @@ import com.forty.model.vo.LoginUserVO;
 import com.forty.model.vo.UserVO;
 import com.forty.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
-@Tag(name="用户信息的curd")
 public class UserController {
 
     @Resource

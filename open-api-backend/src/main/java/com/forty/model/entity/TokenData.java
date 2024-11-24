@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class TokenData {
     private Long userId;
-    private String userName;
+    private String userAccount;
 }

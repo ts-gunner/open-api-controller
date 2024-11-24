@@ -83,7 +83,7 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
             throw new BusinessException(CodeStatus.NO_AUTH, "用户名或密码错误");
 
         TokenData tokenData = new TokenData();
-        tokenData.setUserName(userInfo.getUserName());
+        tokenData.setUserAccount(userInfo.getUserAccount());
         tokenData.setUserId(userInfo.getId());
         Map map = JSON.parseObject(JSON.toJSONString(tokenData), Map.class);
         return JWTUtils.encrypt(map, settings.getSecretKey());

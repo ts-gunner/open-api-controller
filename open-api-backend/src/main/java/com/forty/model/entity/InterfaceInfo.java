@@ -40,6 +40,16 @@ public class InterfaceInfo implements Serializable {
     @TableField("response_header")
     private String responseHeader;
     /**
+     * 请求体
+     */
+    @TableField("request_body")
+    private String requestBody;
+    /**
+     * 响应体
+     */
+    @TableField("response_body")
+    private String responseBody;
+    /**
      * 接口状态 0 - 关闭  1 - 开启
      */
     private boolean status;
@@ -47,8 +57,8 @@ public class InterfaceInfo implements Serializable {
     /**
      * 创建人
      */
-    @TableField("user_id")
-    private int userId;
+    @TableField("user_account")
+    private String userAccount;
 
     /**
      * 逻辑删除， 0 - 未删除， 1 - 已删除

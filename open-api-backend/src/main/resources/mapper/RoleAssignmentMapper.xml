@@ -12,13 +12,13 @@
     </resultMap>
 
 
-
     <select id="getRoleAssignmentList" resultMap="RoleMapResult">
       select
           role_assignment.role_id as role_id, role_assignment.user_id as user_id,
           user_info.user_account as user_account, user_role.role_name as role_name
       from role_assignment
       LEFT JOIN user_info ON user_info.id = role_assignment.user_id
-      LEFT JOIN user_role ON user_role.role_id = role_assignment.role_id;
+      LEFT JOIN user_role ON user_role.role_id = role_assignment.role_id
+      ${ew.customSqlSegment}
     </select>
 </mapper>

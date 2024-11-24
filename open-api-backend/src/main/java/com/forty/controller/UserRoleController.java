@@ -3,17 +3,14 @@ package com.forty.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.forty.common.BaseResponse;
-import com.forty.model.dto.role.AddUserRoleRequest;
 import com.forty.model.dto.role.UserRoleQueryRequest;
 import com.forty.model.vo.UserRoleVO;
 import com.forty.service.UserRoleService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/role")
-@Tag(name = "用户角色")
 public class UserRoleController {
 
     @Autowired

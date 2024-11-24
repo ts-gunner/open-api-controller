@@ -3,20 +3,16 @@ package com.forty.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.forty.common.BaseResponse;
+import com.forty.common.CodeStatus;
 import com.forty.model.dto.role.AddUserRoleRequest;
 import com.forty.model.dto.roleassignment.RoleAssignmentQueryRequest;
 import com.forty.model.vo.RoleAssignmentVO;
 import com.forty.service.RoleAssignmentService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/role/assignment")
-@Tag(name = "角色授权")
 public class RoleAssignmentController {
 
     @Autowired
@@ -40,4 +36,11 @@ public class RoleAssignmentController {
         return new BaseResponse<>(page);
     }
 
+    /**
+     * 删除角色授权
+     */
+    @GetMapping("/delete")
+    public BaseResponse<Object> deleteAssignment() {
+        return new BaseResponse<>(CodeStatus.FAIL.getCode(), "暂未开发");
+    }
 }

@@ -1,5 +1,7 @@
 package com.forty.interceptor;
 
+import com.alibaba.fastjson2.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forty.common.CodeStatus;
 import com.forty.config.Settings;
 import com.forty.exception.BusinessException;
@@ -24,10 +26,8 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (token == null) throw new BusinessException(CodeStatus.NO_AUTH);
         try {
             Map<String, Object> map = JWTUtils.decrypt(token, settings.getSecretKey());
-            TokenData tokenData = new TokenData();
-            tokenData.setUserId(Long.parseLong((String) map.get("userId")));
-            tokenData.setUserName((String)map.getOrDefault("userName", "未知"));
-            request.setAttribute("tokenData", tokenData);
+            TokenData data = JSON.parseObject(JSON.toJSONString(map), TokenData.class);
+            request.setAttribute("tokenData", data);
         }catch (Exception e){
             throw new BusinessException(CodeStatus.NO_AUTH, "身份验证失败: " + e.getMessage());
         }
