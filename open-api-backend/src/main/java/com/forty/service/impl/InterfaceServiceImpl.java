@@ -26,6 +26,7 @@ public class InterfaceServiceImpl extends ServiceImpl<InterfaceInfoMapper, Inter
 
     @Override
     public void addInterface(InterfaceInfoAddRequest request, String userAccount) {
+
         QueryWrapper<InterfaceInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("name", request.getInterfaceName());
         InterfaceInfo interfaceInfoObject = this.baseMapper.selectOne(queryWrapper);
@@ -53,7 +54,7 @@ public class InterfaceServiceImpl extends ServiceImpl<InterfaceInfoMapper, Inter
         String userAccount = request.getUserAccount();
         Boolean status = request.getAPIStatus();
         queryWrapper.like(!StringUtils.isBlank(interfaceName), "name", interfaceName);
-        queryWrapper.eq(!StringUtils.isBlank(methodName), "method", methodName.toUpperCase());
+        if (!StringUtils.isBlank(methodName)) queryWrapper.eq("method", methodName.toUpperCase());
         queryWrapper.like(!StringUtils.isBlank(userAccount), "user_account", userAccount);
         queryWrapper.eq(status != null ,"status", status);
         IPage<InterfaceInfo> page = this.baseMapper.selectPage(interfaceInfoIPage, queryWrapper);

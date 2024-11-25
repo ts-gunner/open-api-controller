@@ -19,6 +19,14 @@
       from role_assignment
       LEFT JOIN user_info ON user_info.id = role_assignment.user_id
       LEFT JOIN user_role ON user_role.role_id = role_assignment.role_id
-      ${ew.customSqlSegment}
+    <where>
+        <if test="userAccount != null and userAccount != ''">
+            AND user_info.user_account = #{userAccount}
+        </if>
+      <if test="roleName != null and roleName != ''">
+          AND user_role.role_name = #{roleName}
+      </if>
+    </where>
+
     </select>
 </mapper>

@@ -10,6 +10,7 @@ import lombok.Getter;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 
 @Data
@@ -45,6 +46,7 @@ public class LoginUserVO implements Serializable {
      */
     private String userProfile;
 
+    private List<String> roles;
     /**
      * 创建时间
      */

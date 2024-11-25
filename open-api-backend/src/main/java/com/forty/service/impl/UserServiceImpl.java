@@ -9,12 +9,15 @@ import com.forty.config.Settings;
 import com.forty.constant.CommonConstant;
 import com.forty.exception.BusinessException;
 import com.forty.mapper.UserInfoMapper;
+import com.forty.model.dto.roleassignment.RoleAssignmentQueryRequest;
 import com.forty.model.dto.user.UserAddRequest;
 import com.forty.model.dto.user.UserQueryRequest;
 import com.forty.model.entity.UserInfo;
 import com.forty.model.entity.TokenData;
 import com.forty.model.vo.LoginUserVO;
+import com.forty.model.vo.RoleAssignmentVO;
 import com.forty.model.vo.UserVO;
+import com.forty.service.RoleAssignmentService;
 import com.forty.service.UserService;
 import com.forty.utils.JWTUtils;
 import jakarta.annotation.Resource;
@@ -35,7 +38,9 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
     @Resource
     Settings settings;
-    private RequestBodyService requestBodyBuilder;
+
+    @Resource
+    RoleAssignmentService roleAssignmentService;
 
     public Long userRegister(String userAccount, String userPassword, String checkPassword) {
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
@@ -81,10 +86,15 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         String encryptPassword = DigestUtils.md5DigestAsHex((settings.getSalt() + userPassword).getBytes());
         if (!encryptPassword.equals(userInfo.getPassword()))
             throw new BusinessException(CodeStatus.NO_AUTH, "用户名或密码错误");
-
+        // 获取用户角色
+        RoleAssignmentQueryRequest request = new RoleAssignmentQueryRequest();
+        request.setUserAccount(userAccount);
+        Page<RoleAssignmentVO> userRoleMapVOList = roleAssignmentService.getUserRoleMapVOList(request);
+        List<String> roles = userRoleMapVOList.getRecords().stream().map(RoleAssignmentVO::getRoleName).toList();
         TokenData tokenData = new TokenData();
         tokenData.setUserAccount(userInfo.getUserAccount());
         tokenData.setUserId(userInfo.getId());
+        tokenData.setRoles(roles);
         Map map = JSON.parseObject(JSON.toJSONString(tokenData), Map.class);
         return JWTUtils.encrypt(map, settings.getSecretKey());
     }
@@ -99,9 +109,10 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     }
 
     @Override
-    public LoginUserVO getLoginUserVO(UserInfo userInfo) {
+    public LoginUserVO getLoginUserVO(UserInfo userInfo, TokenData tokenData) {
         LoginUserVO loginUserVO = new LoginUserVO();
         BeanUtils.copyProperties(userInfo, loginUserVO);
+        loginUserVO.setRoles(tokenData.getRoles());
         return loginUserVO;
     }
 

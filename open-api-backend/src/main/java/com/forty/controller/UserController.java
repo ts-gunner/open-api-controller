@@ -61,7 +61,7 @@ public class UserController {
     @Operation(description = "获取当前登录用户的用户信息")
     public BaseResponse<LoginUserVO> getUserInfo(@RequestAttribute("tokenData") TokenData tokenData){
         UserInfo user = userService.getUserByUserId(tokenData.getUserId());
-        return new BaseResponse<>(userService.getLoginUserVO(user));
+        return new BaseResponse<>(userService.getLoginUserVO(user, tokenData));
     }
 
     /**

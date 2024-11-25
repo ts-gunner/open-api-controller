@@ -47,9 +47,7 @@ public class JWTUtils {
         try {
             Jws<Claims> jws = Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
             Claims payload = jws.getPayload();
-            Map<String, Object> map = new HashMap<>();
-            payload.forEach((_key, _value) -> map.put(_key, _value.toString()));
-            return map;
+            return new HashMap<>(payload);
         } catch (Exception e) {
             log.info(e.getMessage());
             return null;

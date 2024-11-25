@@ -15,7 +15,6 @@ import com.forty.model.entity.UserRole;
 import com.forty.model.vo.RoleAssignmentVO;
 import com.forty.service.RoleAssignmentService;
 import jakarta.annotation.Resource;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,10 +32,11 @@ public class RoleAssignmentServiceImpl extends ServiceImpl<RoleAssignmentMapper,
     @Override
     public Page<RoleAssignmentVO> getUserRoleMapVOList(RoleAssignmentQueryRequest request) {
         Page<RoleAssignmentVO> roleMapVOPage = new Page<>(request.getCurrentPage(), request.getPageSize());
-        QueryWrapper<RoleAssignment> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(!StringUtils.isBlank(request.getRoleName()), "role_name", request.getRoleName());
-        queryWrapper.like(!StringUtils.isBlank(request.getUserAccount()), "user_account", request.getUserAccount());
-        List<RoleAssignmentVO> userRoleMapList = this.baseMapper.getRoleAssignmentList(roleMapVOPage, queryWrapper);
+        List<RoleAssignmentVO> userRoleMapList = this.baseMapper.getRoleAssignmentList(
+                roleMapVOPage,
+                request.getUserAccount(),
+                request.getRoleName()
+                );
         roleMapVOPage.setRecords(userRoleMapList);
         roleMapVOPage.setTotal(userRoleMapList.size());
         return roleMapVOPage;

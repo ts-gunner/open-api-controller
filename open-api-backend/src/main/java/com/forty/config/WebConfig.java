@@ -20,7 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
                 // open-api document
                 "/swagger-resources/**", "/webjars/**", "/v3/**", "/swagger-ui.html/**",
                 "/api", "/api-docs", "/api-docs/**", "/doc.html/**",
-                "/user/register", "/user/login", "/"
+                "/user/register", "/user/login", "/", "/favicon.ico"
         };
 
         registry.addInterceptor(authInterceptor)
@@ -28,16 +28,4 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns(excludePatterns);
     }
 
-    // 跨域请求
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowCredentials(true)
-                // 放行哪些域名
-                .allowedOriginPatterns("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .exposedHeaders("*");
-    }
 }

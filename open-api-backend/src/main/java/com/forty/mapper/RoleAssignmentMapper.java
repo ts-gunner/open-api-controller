@@ -13,7 +13,7 @@ import java.util.List;
 public interface RoleAssignmentMapper extends BaseMapper<RoleAssignment> {
     List<RoleAssignmentVO> getRoleAssignmentList(
             IPage<RoleAssignmentVO> page,
-            @Param(Constants.WRAPPER) QueryWrapper<RoleAssignment> queryWrapper
+            String userAccount, String roleName
     );
 
 }
