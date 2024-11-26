@@ -3,6 +3,10 @@ spring:
     name: open-api-controller
   profiles:
     active: dev
+  jackson:
+    #  格式化返回时间 yyyy-MM-dd HH:mm:ss
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
 
 server:
   port: 8443

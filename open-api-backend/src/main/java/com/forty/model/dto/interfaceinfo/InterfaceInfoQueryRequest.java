@@ -17,7 +17,7 @@ public class InterfaceInfoQueryRequest extends PageRequest implements Serializab
 
     private String userAccount;
 
-    private Boolean APIStatus;
+    private Boolean status;
 
     private static final long serialVersionUID = 1L;
 }

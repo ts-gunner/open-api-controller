@@ -10,7 +10,7 @@ public class InterfaceInfoUpdateRequest implements Serializable {
     private Integer interfaceId;
     private String interfaceName;
     private String interfaceDescription;
-    private Boolean APIStatus;
+    private Boolean status;
     private String method;
     private String url;
     private String requestHeader;

@@ -52,7 +52,7 @@ public class InterfaceServiceImpl extends ServiceImpl<InterfaceInfoMapper, Inter
         String interfaceName = request.getInterfaceName();
         String methodName = request.getMethod();
         String userAccount = request.getUserAccount();
-        Boolean status = request.getAPIStatus();
+        Boolean status = request.getStatus();
         queryWrapper.like(!StringUtils.isBlank(interfaceName), "name", interfaceName);
         if (!StringUtils.isBlank(methodName)) queryWrapper.eq("method", methodName.toUpperCase());
         queryWrapper.like(!StringUtils.isBlank(userAccount), "user_account", userAccount);
@@ -83,7 +83,7 @@ public class InterfaceServiceImpl extends ServiceImpl<InterfaceInfoMapper, Inter
 
         String interfaceName = request.getInterfaceName();
         String description = request.getInterfaceDescription();
-        Boolean status = request.getAPIStatus();
+        Boolean status = request.getStatus();
         String method = request.getMethod();
         String requestHeader = request.getRequestHeader();
         String responseHeader = request.getResponseHeader();
