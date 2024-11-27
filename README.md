@@ -81,9 +81,9 @@ VO: Value Object， 可以理解为相应参数对象
 
 1.   密钥不能直接在服务器之间传递，有可能会被拦截
 
+参数 3： 用户参数
 
-
-参数 3：sign签名
+参数 4：sign签名
 
 加密方式： 对称加密，非对称加密，md5加密（不可解密）
 
@@ -107,10 +107,43 @@ abc + abcdefgh -> xcasdsadfh1i2301hsiaodnsa-
 
 措施：
 
-1.   加随机数， 只能用一次
+1.   参数5： 加随机数， 只能用一次
 
      服务端要保存用过的随机数
 
-2.   加timestamp时间戳
+2.   参数6： 加timestamp时间戳
 
 3.   方法1和方法2搭配使用，在时间戳的许可时间内，记录使用过的随机数。当超过许可时间，清除记录过的随机数。
+
+
+
+
+
+完整思路：
+
+
+
+Controller方：
+
+1.   用户创建时，会自动生成一个secret ID
+
+2.   用户点击创建secret Key的时候，会创建一个secret Key， 但创建后需要用户自己保存，之后用户无法查看创建过的secret key，只能重新创建一个
+
+     
+
+Client方：
+
+1.   将accessKey，用户参数，随机数，时间戳添加到Header中
+2.   使用 用户参数和secret key生成一个sign，并添加到Header中
+3.   将header添加到http请求中调用API
+
+
+
+API Service方：
+
+1.   验证签名是否合法
+     1.   查询数据库中是否有accessKey且可用状态，则pass
+     2.   查询数据库，用accessKey查询secretKey, 用secretKey和用户参数生成一个sign， 比对这个sign和client传来的sign是否一致， 一致则pass
+     3.   查看nonce是否存在于redis中，如果存在，则是接口重放，不存在则pass
+     4.   查看时间戳是否在允许范围内（假设5分钟内），如果时间戳超出范围，则服务器拒绝该请求。
+     5.   服务器对IP的请求频率进行监控，请求频率过高的，直接禁止。

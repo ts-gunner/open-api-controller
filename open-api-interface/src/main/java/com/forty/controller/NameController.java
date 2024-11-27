@@ -1,5 +1,6 @@
 package com.forty.controller;
 
+import com.forty.model.User;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,7 +18,7 @@ public class NameController {
     }
 
     @PostMapping("/postName")
-    public String postName(@RequestBody String name) {
-        return "POST 你的名字是: " + name;
+    public String postName(@RequestBody User user) {
+        return "POST 你的名字是: " + user.getUserName();
     }
 }
