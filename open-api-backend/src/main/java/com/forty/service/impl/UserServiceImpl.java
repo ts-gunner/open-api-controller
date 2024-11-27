@@ -2,16 +2,19 @@ package com.forty.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.forty.common.CodeStatus;
 import com.forty.config.Settings;
 import com.forty.constant.CommonConstant;
 import com.forty.exception.BusinessException;
+import com.forty.mapper.RoleAssignmentMapper;
 import com.forty.mapper.UserInfoMapper;
 import com.forty.model.dto.roleassignment.RoleAssignmentQueryRequest;
 import com.forty.model.dto.user.UserAddRequest;
 import com.forty.model.dto.user.UserQueryRequest;
+import com.forty.model.dto.user.UserUpdateRequest;
 import com.forty.model.entity.UserInfo;
 import com.forty.model.entity.TokenData;
 import com.forty.model.vo.LoginUserVO;
@@ -41,6 +44,9 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
     @Resource
     RoleAssignmentService roleAssignmentService;
+
+    @Resource
+    RoleAssignmentMapper roleAssignmentMapper;
 
     public Long userRegister(String userAccount, String userPassword, String checkPassword) {
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
@@ -126,6 +132,9 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         List<UserVO> list = userInfoPage.getRecords().stream().map((record) -> {
             UserVO userVO = new UserVO();
             BeanUtils.copyProperties(record, userVO);
+            List<RoleAssignmentVO> roleAssignmentList = roleAssignmentMapper.getRoleAssignmentList(record.getUserAccount(), null);
+            List<String> roles = roleAssignmentList.stream().map(RoleAssignmentVO::getRoleName).toList();
+            userVO.setRoles(roles);
             return userVO;
         }).toList();
         userVOPage.setRecords(list);
@@ -158,6 +167,15 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         UserInfo userInfo = this.baseMapper.selectOne(queryWrapper);
         if (userInfo == null) throw new BusinessException(CodeStatus.DATA_NOT_EXIST, "找不到该用户");
         this.baseMapper.deleteById(userInfo);
+    }
+
+    @Override
+    public int updateUserData(UserUpdateRequest request) {
+        UpdateWrapper<UserInfo> wrapper = new UpdateWrapper<>();
+        wrapper.eq("id",request.getId());
+        wrapper.set(!StringUtils.isBlank(request.getUserName()), "user_name",request.getUserName());
+        wrapper.set(!StringUtils.isBlank(request.getUserProfile()), "user_profile",request.getUserProfile());
+        return this.baseMapper.update(wrapper);
     }
 
     public QueryWrapper<UserInfo> getUserInfoQueryWrapper(UserQueryRequest request) {

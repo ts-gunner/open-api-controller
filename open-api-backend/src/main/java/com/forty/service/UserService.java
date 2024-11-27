@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.forty.model.dto.user.UserAddRequest;
 import com.forty.model.dto.user.UserQueryRequest;
+import com.forty.model.dto.user.UserUpdateRequest;
 import com.forty.model.entity.TokenData;
 import com.forty.model.entity.UserInfo;
 import com.forty.model.vo.LoginUserVO;
@@ -31,4 +32,6 @@ public interface UserService extends IService<UserInfo> {
     long addUserData(UserAddRequest userAddRequest);
 
     void deleteUserData(Long userId);
+
+    int updateUserData(UserUpdateRequest request);
 }

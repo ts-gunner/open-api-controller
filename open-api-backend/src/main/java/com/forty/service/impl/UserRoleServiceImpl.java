@@ -82,5 +82,16 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
         return pageVO;
     }
 
+    @Override
+    public List<UserRoleVO> getRoleList(UserRoleQueryRequest request) {
+        QueryWrapper<UserRole> queryWrapper = getUserRoleWrapper(request);
+        List<UserRole> userRoles = this.baseMapper.selectList(queryWrapper);
+        return userRoles.stream().map(record -> {
+            UserRoleVO userRoleVO = new UserRoleVO();
+            BeanUtils.copyProperties(record, userRoleVO);
+            return userRoleVO;
+        }).toList();
+    }
+
 
 }

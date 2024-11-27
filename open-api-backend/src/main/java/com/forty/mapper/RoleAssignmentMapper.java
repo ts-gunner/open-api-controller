@@ -16,4 +16,6 @@ public interface RoleAssignmentMapper extends BaseMapper<RoleAssignment> {
             String userAccount, String roleName
     );
 
+    List<RoleAssignmentVO> getRoleAssignmentList(String userAccount, String roleName);
+
 }

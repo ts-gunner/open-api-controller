@@ -4,14 +4,13 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class UserVO implements Serializable {
     private Long id;
 
     private String userAccount;
-
-    private String password;
 
     private String unionId;
 
@@ -22,6 +21,8 @@ public class UserVO implements Serializable {
     private String userAvatar;
 
     private String userProfile;
+
+    private List<String> roles;
 
     private Date createTime;
 

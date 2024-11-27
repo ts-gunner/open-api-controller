@@ -9,6 +9,8 @@ import com.forty.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/role")
 public class UserRoleController {
@@ -27,10 +29,16 @@ public class UserRoleController {
     /**
      * 获取角色信息
      */
-    @PostMapping("/getRole")
-    public BaseResponse<Page<UserRoleVO>> getRole(@RequestBody UserRoleQueryRequest request) {
+    @PostMapping("/getRoleByPage")
+    public BaseResponse<Page<UserRoleVO>> getRoleByPage(@RequestBody UserRoleQueryRequest request) {
         Page<UserRoleVO> userRoleVOList = userRoleService.getUserRoleVOList(request);
         return new BaseResponse<>(userRoleVOList);
+    }
+
+    @PostMapping("/getRoleList")
+    public BaseResponse<List<UserRoleVO>> getRoleList(@RequestBody UserRoleQueryRequest request) {
+        List<UserRoleVO> roleList = userRoleService.getRoleList(request);
+        return new BaseResponse<>(roleList);
     }
 
     /**

@@ -6,6 +6,8 @@ import com.forty.model.dto.role.UserRoleQueryRequest;
 import com.forty.model.entity.UserRole;
 import com.forty.model.vo.UserRoleVO;
 
+import java.util.List;
+
 public interface UserRoleService extends IService<UserRole> {
 
     int addRole(String roleName);
@@ -14,5 +16,5 @@ public interface UserRoleService extends IService<UserRole> {
 
     Page<UserRoleVO> getUserRoleVOList(UserRoleQueryRequest request);
 
-
+    List<UserRoleVO> getRoleList(UserRoleQueryRequest request);
 }

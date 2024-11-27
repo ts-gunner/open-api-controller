@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.forty.common.BaseResponse;
 import com.forty.common.CodeStatus;
 import com.forty.exception.BusinessException;
-import com.forty.model.dto.user.UserAddRequest;
-import com.forty.model.dto.user.UserLoginRequest;
-import com.forty.model.dto.user.UserQueryRequest;
-import com.forty.model.dto.user.UserRegisterRequest;
+import com.forty.model.dto.user.*;
 import com.forty.model.entity.TokenData;
 import com.forty.model.entity.UserInfo;
 import com.forty.model.vo.LoginUserVO;
@@ -67,8 +64,8 @@ public class UserController {
     /**
      * 用户的增删改查
      */
-    @PostMapping("/add")
-    public BaseResponse<Long> add(@RequestBody UserAddRequest request){
+    @PostMapping("/add/user_info")
+    public BaseResponse<Long> addUser(@RequestBody UserAddRequest request){
         if (request == null) throw new BusinessException(CodeStatus.PARAM_ERROR);
         return new BaseResponse<>(userService.addUserData(request));
     }
@@ -86,7 +83,7 @@ public class UserController {
     /**
      * 删除用户
      */
-    @GetMapping("/delete/user")
+    @GetMapping("/delete/user_info")
     @Operation(description = "删除用户")
     public BaseResponse<String> deleteUser(
             @RequestAttribute("tokenData") TokenData tokenData,
@@ -95,6 +92,23 @@ public class UserController {
         if (userId == null) throw new BusinessException(CodeStatus.PARAM_ERROR);
         if (userId.equals(tokenData.getUserId())) throw new BusinessException(CodeStatus.PARAM_ERROR, "不可以删除自己的账号");
         userService.deleteUserData(userId);
+        return new BaseResponse<>();
+    }
+
+    /**
+     * 更新用户部分信息
+     */
+    @PostMapping("/update/user_info")
+    @Operation(description = "更新用户信息")
+    public BaseResponse<Integer> updateUser(@RequestBody UserUpdateRequest request){
+        return new BaseResponse<>(userService.updateUserData(request));
+    }
+
+    /**
+     * 重置用户密码
+     */
+    @PostMapping("/reset/password")
+    public BaseResponse<Integer> resetPassword(){
         return new BaseResponse<>();
     }
 
