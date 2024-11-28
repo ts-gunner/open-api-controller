@@ -34,4 +34,6 @@ public interface UserService extends IService<UserInfo> {
     void deleteUserData(Long userId);
 
     int updateUserData(UserUpdateRequest request);
+
+    String createSecretKey(Long userId);
 }

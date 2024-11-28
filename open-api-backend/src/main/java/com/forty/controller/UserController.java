@@ -112,4 +112,13 @@ public class UserController {
         return new BaseResponse<>();
     }
 
+    /**
+     * 新建密钥key
+     */
+    @GetMapping("/create_user_secret")
+    public BaseResponse<String> createUserSecret(@RequestAttribute("tokenData") TokenData tokenData){
+        String secretKey = userService.createSecretKey(tokenData.getUserId());
+        return new BaseResponse<>(secretKey);
+    }
+
 }

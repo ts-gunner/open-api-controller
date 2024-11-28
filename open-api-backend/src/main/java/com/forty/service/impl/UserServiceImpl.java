@@ -1,5 +1,6 @@
 package com.forty.service.impl;
 
+import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -10,11 +11,13 @@ import com.forty.config.Settings;
 import com.forty.constant.CommonConstant;
 import com.forty.exception.BusinessException;
 import com.forty.mapper.RoleAssignmentMapper;
+import com.forty.mapper.SecretInfoMapper;
 import com.forty.mapper.UserInfoMapper;
 import com.forty.model.dto.roleassignment.RoleAssignmentQueryRequest;
 import com.forty.model.dto.user.UserAddRequest;
 import com.forty.model.dto.user.UserQueryRequest;
 import com.forty.model.dto.user.UserUpdateRequest;
+import com.forty.model.entity.SecretInfo;
 import com.forty.model.entity.UserInfo;
 import com.forty.model.entity.TokenData;
 import com.forty.model.vo.LoginUserVO;
@@ -22,6 +25,7 @@ import com.forty.model.vo.RoleAssignmentVO;
 import com.forty.model.vo.UserVO;
 import com.forty.service.RoleAssignmentService;
 import com.forty.service.UserService;
+import com.forty.utils.EncryptUtils;
 import com.forty.utils.JWTUtils;
 import jakarta.annotation.Resource;
 import org.apache.catalina.User;
@@ -47,6 +51,9 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
     @Resource
     RoleAssignmentMapper roleAssignmentMapper;
+
+    @Resource
+    SecretInfoMapper secretInfoMapper;
 
     public Long userRegister(String userAccount, String userPassword, String checkPassword) {
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
@@ -75,6 +82,7 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
             UserInfo userInfo = new UserInfo();
             userInfo.setUserAccount(userAccount);
             userInfo.setPassword(encryptPassword);
+            userInfo.setSecretId(EncryptUtils.generateEncryptId(settings.getSalt() + userAccount));
             boolean saveResult = this.save(userInfo);
             if (!saveResult) {
                 throw new BusinessException(CodeStatus.SYSTEM_ERROR, "注册失败, 数据库异常");
@@ -153,6 +161,7 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         String encryptPassword = DigestUtils.md5DigestAsHex((settings.getSalt() + userAddRequest.getPassword()).getBytes());
         userInfo.setPassword(encryptPassword);
         userInfo.setUserName(userAddRequest.getUsername());
+        userInfo.setSecretId(EncryptUtils.generateEncryptId(settings.getSalt() + userAddRequest.getUserAccount()));
         userInfo.setUserProfile(userAddRequest.getUserProfile());
         boolean result = this.save(userInfo);
         if (!result) throw new BusinessException(CodeStatus.DB_ERROR, "数据库写入失败");
@@ -176,6 +185,28 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         wrapper.set(!StringUtils.isBlank(request.getUserName()), "user_name",request.getUserName());
         wrapper.set(!StringUtils.isBlank(request.getUserProfile()), "user_profile",request.getUserProfile());
         return this.baseMapper.update(wrapper);
+    }
+
+    @Override
+    public String createSecretKey(Long userId) {
+        QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", userId);
+        UserInfo userInfo = this.baseMapper.selectOne(queryWrapper);
+        if (userInfo == null) throw new BusinessException(CodeStatus.DATA_NOT_EXIST, "找不到该用户");
+        UpdateWrapper<SecretInfo> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("user_id", userId);
+        updateWrapper.eq("available", true);
+        updateWrapper.set("available", false);
+        int update = secretInfoMapper.update(updateWrapper);
+        if (update <= 0) throw new BusinessException(CodeStatus.DB_ERROR, "数据更新失败");
+        String secretKey = EncryptUtils.generateRandomSecret(40);
+        SecretInfo secretInfo = new SecretInfo();
+        secretInfo.setUserId(userId);
+        secretInfo.setSecretId(userInfo.getSecretId());
+        secretInfo.setSecretKey(secretKey);
+        int insertResult = secretInfoMapper.insert(secretInfo);
+        if (insertResult == 0) throw new BusinessException(CodeStatus.DB_ERROR);
+        return secretKey;
     }
 
     public QueryWrapper<UserInfo> getUserInfoQueryWrapper(UserQueryRequest request) {

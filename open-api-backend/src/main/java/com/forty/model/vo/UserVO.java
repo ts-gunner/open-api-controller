@@ -18,6 +18,8 @@ public class UserVO implements Serializable {
 
     private String userName;
 
+    private String secretId;
+
     private String userAvatar;
 
     private String userProfile;

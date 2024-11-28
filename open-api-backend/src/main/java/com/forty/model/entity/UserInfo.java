@@ -35,6 +35,11 @@ public class UserInfo implements Serializable {
     @TableField("mp_open_id")
     private String mpOpenId;
     /**
+     * 用于调用open api的关键参数之一
+     */
+    @TableField("secret_id")
+    private String secretId;
+    /**
      * 用户昵称
      */
     @TableField("user_name")

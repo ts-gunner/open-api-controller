@@ -27,6 +27,8 @@ public class LoginUserVO implements Serializable {
      * 公众号openid
      */
     private String mpOpenId;
+
+    private String SecretId;
     /**
      * 用户昵称
      */

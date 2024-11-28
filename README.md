@@ -125,9 +125,9 @@ abc + abcdefgh -> xcasdsadfh1i2301hsiaodnsa-
 
 Controller方：
 
-1.   用户创建时，会自动生成一个secret ID
+1.   用户创建时，会自动生成一个secret ID(√)
 
-2.   用户点击创建secret Key的时候，会创建一个secret Key， 但创建后需要用户自己保存，之后用户无法查看创建过的secret key，只能重新创建一个
+2.   用户点击创建secret Key的时候，会创建一个secret Key， 但创建后需要用户自己保存，之后用户无法查看创建过的secret key，只能重新创建一个(√)
 
      
 
