@@ -5,8 +5,8 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
-import com.forty.EncryptUtils;
 import com.forty.model.User;
+import com.forty.utils.EncryptUtils;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class FortyClient {
 
 
     public String generateSign(String body) {
-        return EncryptUtils.encryptBySha256(body + "." + this.secretKey);
+        return EncryptUtils.generateEncryptString(body + "." + this.secretKey);
     }
     public String postName(User user) {
         String jsonStr = JSONUtil.toJsonStr(user);

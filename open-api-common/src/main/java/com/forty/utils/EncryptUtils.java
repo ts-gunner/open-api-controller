@@ -5,12 +5,9 @@ import cn.hutool.crypto.digest.DigestAlgorithm;
 import cn.hutool.crypto.digest.Digester;
 
 public class EncryptUtils {
-    public static void main(String[] args) {
-        System.out.println(generateRandomSecret(32));
-    }
-    public static String generateEncryptId(String salt) {
+    public static String generateEncryptString(String body) {
         Digester md5 = new Digester(DigestAlgorithm.SHA256);
-        return md5.digestHex(salt);
+        return md5.digestHex(body);
     }
 
     public static String generateRandomSecret(int length) {
@@ -20,4 +17,5 @@ public class EncryptUtils {
                 "!@#$%^&*()-_=+[]{}|;:,.<>?";
         return RandomUtil.randomString(customChars, length);
     }
+
 }

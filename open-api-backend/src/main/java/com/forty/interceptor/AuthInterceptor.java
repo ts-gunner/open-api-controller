@@ -1,12 +1,11 @@
 package com.forty.interceptor;
 
 import com.alibaba.fastjson2.JSON;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.forty.common.CodeStatus;
 import com.forty.config.Settings;
-import com.forty.exception.BusinessException;
 import com.forty.model.entity.TokenData;
 import com.forty.utils.JWTUtils;
+import com.forty.common.CodeStatus;
+import com.forty.exception.BusinessException;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

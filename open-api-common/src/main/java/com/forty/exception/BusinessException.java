@@ -1,7 +1,10 @@
 package com.forty.exception;
 
-import com.forty.common.CodeStatus;
 
+import com.forty.common.CodeStatus;
+import lombok.Getter;
+
+@Getter
 public class BusinessException extends RuntimeException {
     private final int code;
 
@@ -15,7 +18,4 @@ public class BusinessException extends RuntimeException {
         this.code = status.getCode();
     }
 
-    public int getCode() {
-        return code;
-    }
 }

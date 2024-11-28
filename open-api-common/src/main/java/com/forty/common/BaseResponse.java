@@ -1,10 +1,14 @@
 package com.forty.common;
 
 
+import lombok.Data;
+
 import java.io.Serializable;
 
+@Data
 public class BaseResponse<T> implements Serializable {
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 14545123L;
 
     private int code = CodeStatus.SUCCESS.getCode();
 

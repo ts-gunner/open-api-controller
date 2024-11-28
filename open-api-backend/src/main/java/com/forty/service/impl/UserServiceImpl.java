@@ -1,6 +1,5 @@
 package com.forty.service.impl;
 
-import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -28,14 +27,11 @@ import com.forty.service.UserService;
 import com.forty.utils.EncryptUtils;
 import com.forty.utils.JWTUtils;
 import jakarta.annotation.Resource;
-import org.apache.catalina.User;
 import org.apache.commons.lang3.StringUtils;
-import org.springdoc.core.service.RequestBodyService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -82,7 +78,7 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
             UserInfo userInfo = new UserInfo();
             userInfo.setUserAccount(userAccount);
             userInfo.setPassword(encryptPassword);
-            userInfo.setSecretId(EncryptUtils.generateEncryptId(settings.getSalt() + userAccount));
+            userInfo.setSecretId(EncryptUtils.generateEncryptString(settings.getSalt() + userAccount));
             boolean saveResult = this.save(userInfo);
             if (!saveResult) {
                 throw new BusinessException(CodeStatus.SYSTEM_ERROR, "注册失败, 数据库异常");
@@ -161,7 +157,7 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         String encryptPassword = DigestUtils.md5DigestAsHex((settings.getSalt() + userAddRequest.getPassword()).getBytes());
         userInfo.setPassword(encryptPassword);
         userInfo.setUserName(userAddRequest.getUsername());
-        userInfo.setSecretId(EncryptUtils.generateEncryptId(settings.getSalt() + userAddRequest.getUserAccount()));
+        userInfo.setSecretId(EncryptUtils.generateEncryptString(settings.getSalt() + userAddRequest.getUserAccount()));
         userInfo.setUserProfile(userAddRequest.getUserProfile());
         boolean result = this.save(userInfo);
         if (!result) throw new BusinessException(CodeStatus.DB_ERROR, "数据库写入失败");
