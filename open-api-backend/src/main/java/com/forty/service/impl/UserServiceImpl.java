@@ -197,8 +197,7 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         updateWrapper.eq("user_id", userId);
         updateWrapper.eq("available", true);
         updateWrapper.set("available", false);
-        int update = secretInfoMapper.update(updateWrapper);
-        if (update <= 0) throw new BusinessException(CodeStatus.DB_ERROR, "数据更新失败");
+        secretInfoMapper.update(updateWrapper);
         String secretKey = EncryptUtils.generateRandomSecret(40);
         SecretInfo secretInfo = new SecretInfo();
         secretInfo.setUserId(userId);
