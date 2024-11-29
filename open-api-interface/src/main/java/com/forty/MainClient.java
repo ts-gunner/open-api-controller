@@ -7,8 +7,8 @@ import java.text.MessageFormat;
 
 public class MainClient {
     public static void main(String[] args) {
-        String secretID = "asdasd";
-        String secretKey = "asdassadasdasd";
+        String secretID = "e8de092f5f9e91f6d451870cfcf6133b3a16ec4c44751e432efd5463e380b946";
+        String secretKey = ",.w[yI&aUCTxtV^FfDQQ>ASt2QZ*ie:%++h.1GD+";
         FortyClient client = new FortyClient(secretID, secretKey);
 
         String resp1 = client.getName("哈哈哈哈你真棒");

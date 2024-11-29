@@ -9,3 +9,20 @@ spring:
     url: jdbc:mysql://localhost:3306/open_api_db
     username: root
     password: 123456
+
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: 123456
+      database: 0
+      lettuce:
+        pool:
+          max-active: 8  # 最大并发连接数
+          max-idle: 8  # 最大空闲连接数
+          min-idle: 5  # 最小空闲连接数
+  session:
+    redis:
+      namespace: "forty:session"  # 定义储存在redis的session数据的命名空间
+      flush-mode: on_save # 每次保存 或更新session时立即将数据同步到Redis中
+      save-mode: always  # 每次请求结束时都保存session

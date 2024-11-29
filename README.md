@@ -133,17 +133,18 @@ Controller方：
 
 Client方：
 
-1.   将accessKey，用户参数，随机数，时间戳添加到Header中
-2.   使用 用户参数和secret key生成一个sign，并添加到Header中
-3.   将header添加到http请求中调用API
+1.   将accessKey，用户参数，随机数，时间戳添加到Header中(√)
+2.   使用 用户参数和secret key生成一个sign，并添加到Header中(√)
+3.   将header添加到http请求中调用API(√)
 
 
 
 API Service方：
 
-1.   验证签名是否合法
-     1.   查询数据库中是否有accessKey且可用状态，则pass
-     2.   查询数据库，用accessKey查询secretKey, 用secretKey和用户参数生成一个sign， 比对这个sign和client传来的sign是否一致， 一致则pass
-     3.   查看nonce是否存在于redis中，如果存在，则是接口重放，不存在则pass
-     4.   查看时间戳是否在允许范围内（假设5分钟内），如果时间戳超出范围，则服务器拒绝该请求。
-     5.   服务器对IP的请求频率进行监控，请求频率过高的，直接禁止。
+验证签名是否合法:
+
+1.   查询数据库中是否有accessKey且可用状态，则pass
+2.   查询数据库，用accessKey查询secretKey, 用secretKey和用户参数生成一个sign， 比对这个sign和client传来的sign是否一致， 一致则pass
+3.   查看nonce是否存在于redis中，如果存在，则是接口重放，不存在则pass
+4.   查看时间戳是否在允许范围内（假设5分钟内），如果时间戳超出范围，则服务器拒绝该请求。
+5.   服务器对IP的请求频率进行监控，请求频率过高的，直接禁止。

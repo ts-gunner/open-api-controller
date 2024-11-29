@@ -16,6 +16,7 @@ import com.forty.model.dto.roleassignment.RoleAssignmentQueryRequest;
 import com.forty.model.dto.user.UserAddRequest;
 import com.forty.model.dto.user.UserQueryRequest;
 import com.forty.model.dto.user.UserUpdateRequest;
+import com.forty.model.entity.RoleAssignment;
 import com.forty.model.entity.SecretInfo;
 import com.forty.model.entity.UserInfo;
 import com.forty.model.entity.TokenData;
@@ -169,9 +170,11 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     public void deleteUserData(Long userId) {
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id", userId);
-        UserInfo userInfo = this.baseMapper.selectOne(queryWrapper);
-        if (userInfo == null) throw new BusinessException(CodeStatus.DATA_NOT_EXIST, "找不到该用户");
-        this.baseMapper.deleteById(userInfo);
+        this.baseMapper.delete(queryWrapper);
+        // 删除对应的角色映射表
+        QueryWrapper<RoleAssignment> roleAssignmentQueryWrapper = new QueryWrapper<>();
+        roleAssignmentQueryWrapper.eq("user_id", userId);
+        this.roleAssignmentMapper.delete(roleAssignmentQueryWrapper);
     }
 
     @Override

@@ -20,6 +20,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Resource
     Settings settings;
 
+
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("Authorization");
         if (token == null) throw new BusinessException(CodeStatus.NO_AUTH);

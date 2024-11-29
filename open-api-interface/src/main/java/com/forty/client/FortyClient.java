@@ -8,6 +8,7 @@ import cn.hutool.json.JSONUtil;
 import com.forty.model.User;
 import com.forty.utils.EncryptUtils;
 
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,13 +23,6 @@ public class FortyClient {
         this.secretKey = secretKey;
     }
 
-    public String getName(String name) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", name);
-        String result = HttpUtil.get("http://localhost:8444/api/name/getName", map);
-        System.out.println(result);
-        return result;
-    }
 
     public Map<String, String> getHeaderMap(String body) {
         Map<String, String> map = new HashMap<>();
@@ -44,6 +38,20 @@ public class FortyClient {
     public String generateSign(String body) {
         return EncryptUtils.generateEncryptString(body + "." + this.secretKey);
     }
+
+
+    public String getName(String name) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        String url = HttpUtil.urlWithForm("http://localhost:8444/api/name/getName", map, Charset.defaultCharset(), false);
+        HttpResponse response = HttpRequest.get(url)
+                .addHeaders(getHeaderMap(name))
+                .execute();
+
+        System.out.println(response.body());
+        return response.body();
+    }
+
     public String postName(User user) {
         String jsonStr = JSONUtil.toJsonStr(user);
         HttpResponse response = HttpRequest.post("http://localhost:8444/api/name/postName")
