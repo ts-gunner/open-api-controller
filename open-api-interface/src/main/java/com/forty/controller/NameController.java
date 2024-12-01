@@ -1,6 +1,6 @@
 package com.forty.controller;
 
-import com.forty.model.User;
+import com.forty.sdk.model.User;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 

@@ -143,8 +143,54 @@ API Service方：
 
 验证签名是否合法:
 
-1.   查询数据库中是否有accessKey且可用状态，则pass
-2.   查询数据库，用accessKey查询secretKey, 用secretKey和用户参数生成一个sign， 比对这个sign和client传来的sign是否一致， 一致则pass
-3.   查看nonce是否存在于redis中，如果存在，则是接口重放，不存在则pass
+1.   查询数据库中是否有accessKey且可用状态，则pass(√)
+2.   查询数据库，用accessKey查询secretKey, 用secretKey和用户参数生成一个sign， 比对这个sign和client传来的sign是否一致， 一致则pass(√)
+3.   查看nonce是否存在于redis中，如果存在，则是接口重放，不存在则pass(√)
 4.   查看时间戳是否在允许范围内（假设5分钟内），如果时间戳超出范围，则服务器拒绝该请求。
 5.   服务器对IP的请求频率进行监控，请求频率过高的，直接禁止。
+
+
+## OpenAPI SDK
+
+编写一个springboot starter SDK，开发者引入后可以直接在application.yaml中写配置，自动创建客户端
+
+如何构建一个starter
+1. 引入lombok和processor(自动生成application引入提示)
+
+    ```xml
+     <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-configuration-processor</artifactId>
+        <optional>true</optional>
+    </dependency>
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <optional>true</optional>
+    </dependency>
+    ```
+
+    
+
+2. 去除maven中的build标签, starter项目不需要构建
+
+    ```xml
+     <build>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <excludes>
+                            <exclude>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                            </exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </build>
+    ```
+
+    

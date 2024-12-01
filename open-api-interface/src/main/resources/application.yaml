@@ -3,6 +3,11 @@ server:
     context-path: "/api"
   port: 8444
 
+forty:
+  client:
+    secretId: "e8de092f5f9e91f6d451870cfcf6133b3a16ec4c44751e432efd5463e380b946"
+    secretKey: ",.w[yI&aUCTxtV^FfDQQ>ASt2QZ*ie:%++h.1GD+"
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -12,9 +17,9 @@ spring:
 
   data:
     redis:
-      host: 127.0.0.1
+      host: 119.29.235.186
       port: 6379
-      password: 123456
+      password: forty.yangjj9958
       database: 0
       lettuce:
         pool:

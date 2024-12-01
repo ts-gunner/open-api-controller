@@ -107,7 +107,7 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         tokenData.setUserId(userInfo.getId());
         tokenData.setRoles(roles);
         Map map = JSON.parseObject(JSON.toJSONString(tokenData), Map.class);
-        return JWTUtils.encrypt(map, settings.getSecretKey());
+        return JWTUtils.encryptPersistent(map, settings.getSecretKey());
     }
 
     @Override

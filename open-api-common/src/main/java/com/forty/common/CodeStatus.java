@@ -8,7 +8,8 @@ public enum CodeStatus {
     DATA_NOT_EXIST(40301, "Data Not Exist"),
     NOT_LOGIN(401, "Not Login"),
     NO_AUTH(40100, "No Auth"),
-    SIGN_AUTH_FAILED(401002, "Sign Auth Failed"),
+    SIGN_AUTH_FAILED(401001, "Sign Auth Failed"),
+    AUTH_ROLE_FAILED(401002, "Auth Role Failed"),
     TOKEN_UNAVAILABLE(40101, "Token Unavailable"),
     DB_ERROR(50001, "DB Error"),
     SYSTEM_ERROR(500, "System Error");

@@ -1,6 +1,7 @@
 package com.forty.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.forty.annotation.RoleCheck;
 import com.forty.common.BaseResponse;
 import com.forty.common.CodeStatus;
 import com.forty.exception.BusinessException;
@@ -65,6 +66,7 @@ public class UserController {
      * 用户的增删改查
      */
     @PostMapping("/add/user_info")
+    @RoleCheck(hasRoles = {"superadmin","admin"})
     public BaseResponse<Long> addUser(@RequestBody UserAddRequest request){
         if (request == null) throw new BusinessException(CodeStatus.PARAM_ERROR);
         return new BaseResponse<>(userService.addUserData(request));
@@ -75,6 +77,7 @@ public class UserController {
      */
     @PostMapping("/get/user_list")
     @Operation(description = "获取用户列表， 仅限admin")
+    @RoleCheck(hasRoles = {"superadmin","admin"})
     public BaseResponse<Page<UserVO>> getUserList(@RequestBody UserQueryRequest request){
         Page<UserVO> userVOList = userService.getUserVOList(request);
         return new BaseResponse<>(userVOList);
@@ -85,6 +88,7 @@ public class UserController {
      */
     @GetMapping("/delete/user_info")
     @Operation(description = "删除用户")
+    @RoleCheck(requiredRoles = {"superadmin"})
     public BaseResponse<String> deleteUser(
             @RequestAttribute("tokenData") TokenData tokenData,
             @RequestParam("userId") Long userId

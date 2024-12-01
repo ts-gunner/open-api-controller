@@ -2,6 +2,7 @@ package com.forty.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.forty.annotation.RoleCheck;
 import com.forty.common.BaseResponse;
 import com.forty.model.dto.interfaceinfo.InterfaceInfoAddRequest;
 import com.forty.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
@@ -24,6 +25,7 @@ public class InterfaceInfoController {
      * 接口的增删改查
      */
     @PostMapping("/add")
+    @RoleCheck(hasRoles = {"superadmin", "admin"})
     public BaseResponse<Object> addInterfaceInfo(
             @RequestAttribute("tokenData") TokenData tokenData,
             @RequestBody InterfaceInfoAddRequest request) {
@@ -32,17 +34,20 @@ public class InterfaceInfoController {
     }
 
     @PostMapping("/query")
+    @RoleCheck(hasRoles = {"superadmin", "admin"})
     public BaseResponse<Page<InterfaceInfoVO>> queryInterfaceInfo(@RequestBody InterfaceInfoQueryRequest request) {
         Page<InterfaceInfoVO> interfaceInfoVOPage = interfaceService.queryInterface(request);
         return new BaseResponse<>(interfaceInfoVOPage);
     }
 
     @GetMapping("/delete")
+    @RoleCheck(requiredRoles = "superadmin")
     public BaseResponse<Integer> deleteInterface(@RequestParam("interfaceId") Integer interfaceId){
         return new BaseResponse<>(interfaceService.deleteInterface(interfaceId));
     }
 
     @PostMapping("/update")
+    @RoleCheck(hasRoles = {"superadmin", "admin"})
     public BaseResponse<Integer> updateInterfaceInfo(@RequestBody InterfaceInfoUpdateRequest request){
         return new BaseResponse<>(interfaceService.updateInterface(request));
     }

@@ -12,6 +12,7 @@
         <module>open-api-backend</module>
         <module>open-api-interface</module>
         <module>open-api-common</module>
+        <module>open-api-client-starter</module>
     </modules>
 
     <properties>

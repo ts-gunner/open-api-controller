@@ -1,36 +1,38 @@
-package com.forty.client;
+package com.forty.sdk.client;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
-import com.forty.model.User;
+import com.forty.sdk.model.User;
 import com.forty.utils.EncryptUtils;
 
-import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 public class FortyClient {
-    private String secretID;
+    private final String secretId;
 
-    private String secretKey;
+    private final String secretKey;
 
-    public FortyClient(String secretID, String secretKey) {
-        this.secretID = secretID;
+    public FortyClient(String secretId, String secretKey) {
+        this.secretId = secretId;
         this.secretKey = secretKey;
     }
 
 
     public Map<String, String> getHeaderMap(String body) {
         Map<String, String> map = new HashMap<>();
-        map.put("secretID", this.secretID);
+        map.put("secretID", this.secretId);
         map.put("sign", generateSign(body));
-        map.put("body", body);
+        map.put("body", Convert.strToUnicode(body));
         map.put("nonce", RandomUtil.randomNumbers(3));
         map.put("timestamp", String.valueOf(System.currentTimeMillis() / 1000));
+        map.put("Content-Type", "application/json; charset=utf-8");
         return map;
     }
 
@@ -43,7 +45,7 @@ public class FortyClient {
     public String getName(String name) {
         Map<String, Object> map = new HashMap<>();
         map.put("name", name);
-        String url = HttpUtil.urlWithForm("http://localhost:8444/api/name/getName", map, Charset.defaultCharset(), false);
+        String url = HttpUtil.urlWithForm("http://localhost:8444/api/name/getName", map, CharsetUtil.CHARSET_UTF_8, false);
         HttpResponse response = HttpRequest.get(url)
                 .addHeaders(getHeaderMap(name))
                 .execute();

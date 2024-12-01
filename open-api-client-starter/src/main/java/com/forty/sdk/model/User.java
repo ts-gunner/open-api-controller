@@ -1,4 +1,4 @@
-package com.forty.model;
+package com.forty.sdk.model;
 
 
 import lombok.Data;
