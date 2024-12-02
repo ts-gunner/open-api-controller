@@ -39,3 +39,8 @@ knife4j:
 setting:
   salt: forty
   secret-key: 55s9q11a!!4)s,1aA@DF(ScACX)A__=-sczc)dkD987s230a==
+
+forty:
+  client:
+    secretId: "e8de092f5f9e91f6d451870cfcf6133b3a16ec4c44751e432efd5463e380b946"
+    secretKey: ",.w[yI&aUCTxtV^FfDQQ>ASt2QZ*ie:%++h.1GD+"

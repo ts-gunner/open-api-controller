@@ -47,6 +47,7 @@ VO: Value Object， 可以理解为相应参数对象
 1. 用户创建
 2. 角色创建，授权，删除，查询
 3. API签名认证(亮点)
+4. open api sdk（springboot starter）
 
 
 
@@ -191,6 +192,33 @@ API Service方：
                 </plugin>
             </plugins>
         </build>
+    
+    ```
+
+3. 写一个config类
+
+    ```java
+    @Configuration
+    @ConfigurationProperties("forty.client")
+    @Data
+    @ComponentScan
+    public class FortyClientConfig {
+    
+        private String secretId;
+    
+        private String secretKey;
+    
+        @Bean
+        public FortyClient fortyClient() {
+            return new FortyClient(secretId, secretKey);
+        }
+    }
+    ```
+
+4. 在resources文件夹中创建`META-INF/spring.factories`,将配置类的路径写入到配置中
+
+    ```text
+    org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.forty.sdk.FortyClientConfig
     ```
 
     

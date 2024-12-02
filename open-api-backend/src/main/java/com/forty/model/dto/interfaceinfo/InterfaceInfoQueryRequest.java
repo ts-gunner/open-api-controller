@@ -11,6 +11,8 @@ import java.io.Serializable;
 @Data
 public class InterfaceInfoQueryRequest extends PageRequest implements Serializable {
 
+    private Integer interfaceId;
+
     private String interfaceName;
 
     private String method;

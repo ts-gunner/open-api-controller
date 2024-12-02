@@ -3,11 +3,6 @@ server:
     context-path: "/api"
   port: 8444
 
-forty:
-  client:
-    secretId: "e8de092f5f9e91f6d451870cfcf6133b3a16ec4c44751e432efd5463e380b946"
-    secretKey: ",.w[yI&aUCTxtV^FfDQQ>ASt2QZ*ie:%++h.1GD+"
-
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -31,3 +26,6 @@ spring:
       namespace: "forty:session"  # 定义储存在redis的session数据的命名空间
       flush-mode: on_save # 每次保存 或更新session时立即将数据同步到Redis中
       save-mode: always  # 每次请求结束时都保存session
+
+  profiles:
+    active: dev

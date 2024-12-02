@@ -43,6 +43,8 @@ create table if not exists `user_info`
     `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
     `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     ) default charset=utf8mb4 comment '用户信息表';
+INSERT INTO `user_info` (`id`,`user_account`, `password`, `secret_id`) VALUES
+(1, "admin", "c9e71845c91e52eb5823d14c66b16b34", "e8de092f5f9e91f6d451870cfcf6133b3a16ec4c44751e432efd5463e380b946");
 
 -- 用户角色表
 DROP TABLE IF EXISTS `user_role`;
@@ -55,6 +57,8 @@ create table if not exists `user_role`
     `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) default charset=utf8mb4 comment '用户角色表';
 
+INSERT INTO `user_role` (`role_id`, `role_name`) VALUES (1, 'superadmin');
+INSERT INTO `user_role` (`role_id`, `role_name`) VALUES (2, 'admin');
 
 
 -- 用户 - 角色 一对多
@@ -68,7 +72,8 @@ create table if not exists `role_assignment`
     `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
     `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) default charset=utf8mb4 comment '用户-角色映射表';
-
+INSERT INTO `role_assignment`(`role_id`, `user_id`) VALUES (1, 1);
+INSERT INTO `role_assignment`(`role_id`, `user_id`) VALUES (2, 1);
 
 -- 密钥管理 一个角色有多个密钥
 DROP TABLE IF EXISTS `secret_info`;

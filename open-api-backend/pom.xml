@@ -35,6 +35,11 @@
             <version>0.0.1</version>
         </dependency>
         <dependency>
+            <groupId>com.forty</groupId>
+            <artifactId>open-api-client-starter</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>

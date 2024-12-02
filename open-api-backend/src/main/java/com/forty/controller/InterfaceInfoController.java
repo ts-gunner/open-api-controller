@@ -51,4 +51,27 @@ public class InterfaceInfoController {
     public BaseResponse<Integer> updateInterfaceInfo(@RequestBody InterfaceInfoUpdateRequest request){
         return new BaseResponse<>(interfaceService.updateInterface(request));
     }
+
+    /**
+     * 发布接口
+     * @param interfaceId
+     * @return
+     */
+    @GetMapping("/online")
+    public BaseResponse<Integer> publishInterface(@RequestParam("interfaceId") Integer interfaceId){
+        interfaceService.publishInterface(interfaceId);
+        return new BaseResponse<>();
+    }
+
+    /**
+     * 下线接口
+     * @param interfaceId
+     * @return
+     */
+    @GetMapping("/offline")
+    @RoleCheck(hasRoles = {"superadmin", "admin"})
+    public BaseResponse<Integer> demiseInterface(@RequestParam("interfaceId") Integer interfaceId){
+        interfaceService.demiseInterface(interfaceId);
+        return new BaseResponse<>();
+    }
 }

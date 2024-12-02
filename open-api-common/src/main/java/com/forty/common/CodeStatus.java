@@ -11,6 +11,7 @@ public enum CodeStatus {
     SIGN_AUTH_FAILED(401001, "Sign Auth Failed"),
     AUTH_ROLE_FAILED(401002, "Auth Role Failed"),
     TOKEN_UNAVAILABLE(40101, "Token Unavailable"),
+    INTERFACE_CALL_FAILED(401003, "Interface Call Failed"),
     DB_ERROR(50001, "DB Error"),
     SYSTEM_ERROR(500, "System Error");
 
