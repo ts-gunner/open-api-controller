@@ -1,15 +1,26 @@
 package com.forty.controller;
 
 
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.forty.annotation.RoleCheck;
 import com.forty.common.BaseResponse;
+import com.forty.common.CodeStatus;
+import com.forty.exception.BusinessException;
 import com.forty.model.dto.interfaceinfo.InterfaceInfoAddRequest;
+import com.forty.model.dto.interfaceinfo.InterfaceInfoInvokeRequest;
 import com.forty.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.forty.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
+import com.forty.model.entity.InterfaceInfo;
+import com.forty.model.entity.SecretInfo;
 import com.forty.model.entity.TokenData;
 import com.forty.model.vo.InterfaceInfoVO;
+import com.forty.sdk.client.FortyClient;
 import com.forty.service.InterfaceService;
+import com.forty.service.SecretInfoService;
+import com.forty.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +32,12 @@ public class InterfaceInfoController {
 
     @Autowired
     InterfaceService interfaceService;
+
+    @Autowired
+    SecretInfoService secretInfoService;
+
+    @Autowired
+    UserService userService;
     /**
      * 接口的增删改查
      */
@@ -73,5 +90,25 @@ public class InterfaceInfoController {
     public BaseResponse<Integer> demiseInterface(@RequestParam("interfaceId") Integer interfaceId){
         interfaceService.demiseInterface(interfaceId);
         return new BaseResponse<>();
+    }
+
+    /**
+     * 在线调试API
+     */
+    @PostMapping("/invoke")
+    public BaseResponse<Object> invokeInterface(
+            @RequestBody InterfaceInfoInvokeRequest request,
+            @RequestAttribute("tokenData") TokenData tokenData){
+
+        InterfaceInfo interfaceInfo = interfaceService.getById(request.getInterfaceId());
+        if (interfaceInfo == null) throw new BusinessException(CodeStatus.INTERFACE_CALL_FAILED, "接口不存在");
+        if (!interfaceInfo.getStatus()) throw new BusinessException(CodeStatus.INTERFACE_CALL_FAILED, "接口已关闭");
+        String secretId = userService.getById(tokenData.getUserId()).getSecretId();
+        SecretInfo secretObject = secretInfoService.getSecretObject(tokenData.getUserId());
+        if (secretObject == null) throw new BusinessException(CodeStatus.INTERFACE_CALL_FAILED, "没有密钥key，请先创建一个再试！");
+        String secretKey = secretObject.getSecretKey();
+        FortyClient client = new FortyClient(secretId, secretKey);
+        JSONObject jsonObject = JSONUtil.parseObj(request.getUserRequestParams());
+        return new BaseResponse<>(client.getName(jsonObject.getStr("name")));
     }
 }
