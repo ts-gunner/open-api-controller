@@ -1,5 +1,6 @@
 package com.forty.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.forty.model.dto.interfaceinfo.InterfaceInfoAddRequest;
@@ -13,6 +14,8 @@ public interface InterfaceService extends IService<InterfaceInfo> {
     void addInterface(InterfaceInfoAddRequest request, String userAccount);
 
     Page<InterfaceInfoVO> queryInterface(InterfaceInfoQueryRequest request);
+
+    QueryWrapper<InterfaceInfo> getInterfaceQueryWrapper(InterfaceInfoQueryRequest request);
 
     int deleteInterface(int interfaceId);
 

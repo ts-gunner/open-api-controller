@@ -51,8 +51,7 @@ public class InterfaceServiceImpl extends ServiceImpl<InterfaceInfoMapper, Inter
     }
 
     @Override
-    public Page<InterfaceInfoVO> queryInterface(InterfaceInfoQueryRequest request) {
-        IPage<InterfaceInfo> interfaceInfoIPage = new Page<>(request.getCurrentPage(), request.getPageSize());
+    public QueryWrapper<InterfaceInfo> getInterfaceQueryWrapper(InterfaceInfoQueryRequest request) {
         QueryWrapper<InterfaceInfo> queryWrapper = new QueryWrapper<>();
         Integer interfaceId = request.getInterfaceId();
         String interfaceName = request.getInterfaceName();
@@ -64,6 +63,13 @@ public class InterfaceServiceImpl extends ServiceImpl<InterfaceInfoMapper, Inter
         if (!StringUtils.isBlank(methodName)) queryWrapper.eq("method", methodName.toUpperCase());
         queryWrapper.like(!StringUtils.isBlank(userAccount), "user_account", userAccount);
         queryWrapper.eq(status != null ,"status", status);
+        return queryWrapper;
+    }
+
+    @Override
+    public Page<InterfaceInfoVO> queryInterface(InterfaceInfoQueryRequest request) {
+        IPage<InterfaceInfo> interfaceInfoIPage = new Page<>(request.getCurrentPage(), request.getPageSize());
+        QueryWrapper<InterfaceInfo> queryWrapper = getInterfaceQueryWrapper(request);
         IPage<InterfaceInfo> page = this.baseMapper.selectPage(interfaceInfoIPage, queryWrapper);
         Page<InterfaceInfoVO> interfaceInfoVOPage = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
         List<InterfaceInfoVO> list = page.getRecords().stream().map(record -> {

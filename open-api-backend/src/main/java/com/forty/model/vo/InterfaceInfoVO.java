@@ -31,6 +31,8 @@ public class InterfaceInfoVO implements Serializable {
 
     private String userAccount;
 
+    private Long totalCalls;
+
     private Date createTime;
 
     private Date updateTime;

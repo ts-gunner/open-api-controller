@@ -20,6 +20,7 @@ create table if not exists `interface_info`
     `response_body` text not null comment '响应体',
     `status` tinyint default 0 comment '接口状态， 0 - 关闭， 1 - 开启',
     `method` varchar(255) not null comment '请求类型',
+    `total_calls` bigint default 0 not null comment '接口总调用次数（所有人）',
     `user_account` varchar(255) not null comment '创建人',
     `is_delete` tinyint default 0 comment '逻辑删除',
     `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -86,3 +87,19 @@ create table if not exists `secret_info`
     available tinyint default 1 not null comment '是否可用',
     `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP
 ) default charset=utf8mb4 comment '密钥管理表';
+
+
+-- 用户调用接口关系表
+DROP TABLE IF EXISTS `user_interface_info`;
+create table if not exists `user_interface_info`
+(
+    `id` int not null auto_increment comment 'id' primary key,
+    `user_id` bigint null comment '调用者Id',
+    `interface_id` int not null comment '接口id',
+    `total_count` int default 0 null comment '调用总次数',
+    `remain_count` int default 0 null comment '调用剩余次数',
+    `status` int default 1 comment '接口状态， 0 - 禁用， 1 - 正常',
+    `is_delete` tinyint default 0 comment '逻辑删除',
+    `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) comment '用户调用接口关系表';

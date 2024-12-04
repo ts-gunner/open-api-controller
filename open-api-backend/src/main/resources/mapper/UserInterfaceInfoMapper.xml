@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forty.mapper.UserInterfaceInfoMapper">
+
+    <resultMap id="UserInterfaceMapResult" type="com.forty.model.vo.UserInterfaceVO">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="interfaceId" column="interface_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="url" column="url" jdbcType="VARCHAR"/>
+        <result property="method" column="method" jdbcType="VARCHAR"/>
+        <result property="totalCalls" column="total_calls" jdbcType="BIGINT"/>
+        <result property="totalCount" column="total_count" jdbcType="INTEGER"/>
+        <result property="remainCount" column="remain_count" jdbcType="INTEGER"/>
+    </resultMap>
+    <select id="getUserInterfaceVOList" resultMap="UserInterfaceMapResult">
+            select
+            `name`,description, url, method, total_calls,
+            interface_info.id as interface_id,
+            user_interface_info.user_id as user_id,
+            IF(total_count, total_count, 0) as total_count,
+            IF(remain_count, remain_count, 0) as remain_count
+            from interface_info
+            LEFT JOIN user_interface_info ON interface_info.`id` = user_interface_info.interface_id
+            LEFT JOIN user_info ON user_info.id = user_interface_info.user_id
+            ${ew.customSqlSegment}
+    </select>
+</mapper>

@@ -1,9 +1,9 @@
 package com.forty.controller;
 
 
-import cn.hutool.json.JSON;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.forty.annotation.RoleCheck;
 import com.forty.common.BaseResponse;
@@ -22,8 +22,11 @@ import com.forty.service.InterfaceService;
 import com.forty.service.SecretInfoService;
 import com.forty.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -55,6 +58,20 @@ public class InterfaceInfoController {
     public BaseResponse<Page<InterfaceInfoVO>> queryInterfaceInfo(@RequestBody InterfaceInfoQueryRequest request) {
         Page<InterfaceInfoVO> interfaceInfoVOPage = interfaceService.queryInterface(request);
         return new BaseResponse<>(interfaceInfoVOPage);
+    }
+
+
+    @PostMapping("/queryAll")
+    @RoleCheck(hasRoles = {"superadmin", "admin"})
+    public BaseResponse<List<InterfaceInfoVO>> queryAllInterfaceInfo(@RequestBody InterfaceInfoQueryRequest request) {
+        QueryWrapper<InterfaceInfo> interfaceQueryWrapper = interfaceService.getInterfaceQueryWrapper(request);
+        List<InterfaceInfo> list = interfaceService.list(interfaceQueryWrapper);
+        List<InterfaceInfoVO> interfaceInfoVOList = list.stream().map(item -> {
+            InterfaceInfoVO interfaceInfoVO = new InterfaceInfoVO();
+            BeanUtils.copyProperties(item, interfaceInfoVO);
+            return interfaceInfoVO;
+        }).toList();
+        return new BaseResponse<>(interfaceInfoVOList);
     }
 
     @GetMapping("/delete")
@@ -111,4 +128,7 @@ public class InterfaceInfoController {
         JSONObject jsonObject = JSONUtil.parseObj(request.getUserRequestParams());
         return new BaseResponse<>(client.getName(jsonObject.getStr("name")));
     }
+
+
+
 }
