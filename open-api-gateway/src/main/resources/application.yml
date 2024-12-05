@@ -9,9 +9,21 @@ spring:
           uri: http://localhost:8444
           predicates:
             - Path=/api/**
-          filters:
-            - AddRequestHeader=forty, zsl
-            - AddRequestParameter=name, yangjj
+        - id: open_api_controller_route
+          uri: http://localhost:8443
+          predicates:
+            - Path=/controller/**
+      globalcors:
+        cors-configurations:
+          "[/**]":
+            allow-credentials: true
+            allowed-origin-patterns: "*"
+            allowed-methods: "*"
+            allowed-headers: "*"
+            exposed-headers: "*"
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin   # 响应头去重
+
 logging:
   level:
     org:
