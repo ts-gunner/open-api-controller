@@ -13,6 +13,7 @@
         <module>open-api-interface</module>
         <module>open-api-common</module>
         <module>open-api-client-starter</module>
+        <module>open-api-gateway</module>
     </modules>
 
     <properties>

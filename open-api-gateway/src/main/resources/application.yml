@@ -1,0 +1,20 @@
+server:
+  port: 8445
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: api_interface_route
+          uri: http://localhost:8444
+          predicates:
+            - Path=/api/**
+          filters:
+            - AddRequestHeader=forty, zsl
+            - AddRequestParameter=name, yangjj
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway: trace

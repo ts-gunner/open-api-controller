@@ -20,15 +20,16 @@ VO: Value Object， 可以理解为相应参数对象
 # 项目选型
 
 
-| project           | package      | version | remark                                              |
-| ----------------- | ------------ | ------- | --------------------------------------------------- |
-| backend,interface | java SDK     | 17      |                                                     |
-| backend,interface | springboot   | 3.3.5   | web框架                                             |
-| backend           | mybatis-plus | 3.5.9   | 操作数据库                                          |
-| backend           | fastjson2    | 2.0.53  | JSON操作                                            |
-| backend           | knife4j      | 4.4.0   | open api文档                                        |
-| backend           | JJwt         | 0.12.5  | Jwt                                                 |
-| interface         | Hutool       | 5.8.16  | 工具包（封装http请求）https://www.hutool.cn/docs/#/ |
+| project           | package              | version | remark                                     |
+|-------------------|----------------------|---------|--------------------------------------------|
+| backend,interface | java SDK             | 17      |                                            |
+| backend,interface | springboot           | 3.3.5   | web框架                                      |
+| backend           | mybatis-plus         | 3.5.9   | 操作数据库                                      |
+| backend           | fastjson2            | 2.0.53  | JSON操作                                     |
+| backend           | knife4j              | 4.4.0   | open api文档                                 |
+| backend           | JJwt                 | 0.12.5  | Jwt                                        |
+| interface         | Hutool               | 5.8.16  | 工具包（封装http请求）https://www.hutool.cn/docs/#/ |
+| gateway           | spring cloud gateway | 3.3.6   | API网关                                      |
 
 # 业务特性
 
@@ -159,7 +160,8 @@ API Service方：
 1. 引入lombok和processor(自动生成application引入提示)
 
     ```xml
-     <dependency>
+   <dependencies>
+    <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-configuration-processor</artifactId>
         <optional>true</optional>
@@ -169,6 +171,8 @@ API Service方：
         <artifactId>lombok</artifactId>
         <optional>true</optional>
     </dependency>
+   </dependencies>
+    
     ```
 
     

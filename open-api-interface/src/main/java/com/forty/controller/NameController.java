@@ -1,6 +1,7 @@
 package com.forty.controller;
 
 import com.forty.sdk.model.User;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,9 +10,8 @@ import org.springframework.web.bind.annotation.*;
 public class NameController {
 
     @GetMapping("/getName")
-    public String getName(@RequestParam String name, HttpSession session) {
-        session.setAttribute("apiFunctionName", "getName");
-        session.setAttribute("apiNameParams", name);
+    public String getName(@RequestParam String name, HttpServletRequest request) {
+        System.out.println(request.getHeader("forty"));
         return "GET 你的名字是: " + name;
     }
 
