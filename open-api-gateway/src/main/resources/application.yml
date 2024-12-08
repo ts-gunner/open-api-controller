@@ -8,11 +8,12 @@ spring:
         - id: api_interface_route
           uri: http://localhost:8444
           predicates:
-            - Path=/api/**
+            - Path=/public_api/**
         - id: open_api_controller_route
           uri: http://localhost:8443
           predicates:
             - Path=/controller/**
+
       globalcors:
         cors-configurations:
           "[/**]":
@@ -24,9 +25,28 @@ spring:
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin   # 响应头去重
 
-logging:
-  level:
-    org:
-      springframework:
-        cloud:
-          gateway: trace
+#
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        cloud:
+#          gateway: trace
+dubbo:
+  application:
+    name: dubbo-springboot-gateway-consumer
+    logger: slf4j
+    qos-enable: true
+    qos-port: 33333
+    qos-accept-foreign-ip: false
+  protocol:
+    name: tri
+    port: -1
+  registry:
+    id: nacos-registry
+    address: nacos://127.0.0.1:9002
+
+
+openapi:
+  gateway:
+    white-list: 192.168.1.3

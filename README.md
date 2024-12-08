@@ -49,6 +49,8 @@ VO: Value Object， 可以理解为相应参数对象
 2. 角色创建，授权，删除，查询
 3. API签名认证(亮点)
 4. open api sdk（springboot starter）
+5. 网关
+6. RPC
 
 
 

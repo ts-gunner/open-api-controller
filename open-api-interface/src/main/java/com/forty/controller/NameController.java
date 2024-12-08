@@ -1,8 +1,8 @@
 package com.forty.controller;
 
-import com.forty.sdk.model.User;
+import com.forty.common.BaseResponse;
+import com.forty.model.User;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -10,18 +10,17 @@ import org.springframework.web.bind.annotation.*;
 public class NameController {
 
     @GetMapping("/getName")
-    public String getName(@RequestParam String name, HttpServletRequest request) {
-        System.out.println(request.getHeader("forty"));
-        return "GET 你的名字是: " + name;
+    public BaseResponse<String> getName(@RequestParam String name, HttpServletRequest request) {
+        return new BaseResponse<>("GET 你的名字是: " + name);
     }
 
     @GetMapping("/")
-    public String getHomeName(@RequestParam String name) {
-        return "主页名字是: " + name;
+    public BaseResponse<String> getHomeName(@RequestParam String name) {
+        return new BaseResponse<>("GET 主页名字是: " + name);
     }
 
     @PostMapping("/postName")
-    public String postName(@RequestBody User user) {
-        return "POST 你的名字是: " + user.getUserName();
+    public BaseResponse<String> postName(@RequestBody User user) {
+        return new BaseResponse<>("POST 你的名字是: " + user.getUserName());
     }
 }

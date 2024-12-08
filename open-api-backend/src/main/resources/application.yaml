@@ -37,6 +37,17 @@ knife4j:
   setting:
     language: zh_cn
 
+dubbo:
+  application:
+    name: dubbo-springboot-backend-provider
+    logger: slf4j
+  protocol:
+    name: tri
+    port: -1
+  registry:
+    id: nacos-registry
+    address: nacos://127.0.0.1:9002
+
 # 自定义配置
 setting:
   salt: forty

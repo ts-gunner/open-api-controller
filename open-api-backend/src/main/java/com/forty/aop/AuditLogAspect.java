@@ -14,19 +14,23 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.text.MessageFormat;
 
+
+/**
+ * 已在网关中实现该方法， 无需在微服务中重复实现
+ */
+//@Component
 @Slf4j
-@Aspect
-@Component
+//@Aspect
 public class AuditLogAspect {
 
     @Pointcut("execution(* com.forty.controller.*.*(..))")
     public void pointcut() {}
 
-    @Before("pointcut()")
-    public void beforeInterceptor(JoinPoint joinPoint) {
-        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-        StringBuffer requestURL = request.getRequestURL();
-        log.info(MessageFormat.format("calling {0}",requestURL));
-    }
+//    @Before("pointcut()")
+//    public void beforeInterceptor(JoinPoint joinPoint) {
+//        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+//        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+//        StringBuffer requestURL = request.getRequestURL();
+//        log.info(MessageFormat.format("calling {0}",requestURL));
+//    }
 }

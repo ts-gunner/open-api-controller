@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FortyClient {
+
+    private String public_open_api_url = "http://127.0.0.1:8445";
+
     private final String secretId;
 
     private final String secretKey;
@@ -22,6 +25,11 @@ public class FortyClient {
     public FortyClient(String secretId, String secretKey) {
         this.secretId = secretId;
         this.secretKey = secretKey;
+    }
+
+    public FortyClient(String secretId, String secretKey, String public_open_api_url) {
+        this(secretId, secretKey);
+        this.public_open_api_url = public_open_api_url;
     }
 
 
@@ -45,7 +53,7 @@ public class FortyClient {
     public String getName(String name) {
         Map<String, Object> map = new HashMap<>();
         map.put("name", name);
-        String url = HttpUtil.urlWithForm("http://localhost:8444/api/name/getName", map, CharsetUtil.CHARSET_UTF_8, false);
+        String url = HttpUtil.urlWithForm(public_open_api_url + "/public_api/name/getName", map, CharsetUtil.CHARSET_UTF_8, false);
         HttpResponse response = HttpRequest.get(url)
                 .addHeaders(getHeaderMap(name))
                 .execute();
@@ -56,7 +64,7 @@ public class FortyClient {
 
     public String postName(User user) {
         String jsonStr = JSONUtil.toJsonStr(user);
-        HttpResponse response = HttpRequest.post("http://localhost:8444/api/name/postName")
+        HttpResponse response = HttpRequest.post(public_open_api_url + "/public_api/name/postName")
                 .addHeaders(getHeaderMap(jsonStr))
                 .body(jsonStr)
                 .execute();
