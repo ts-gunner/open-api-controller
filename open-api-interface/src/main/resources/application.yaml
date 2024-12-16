@@ -2,6 +2,3 @@ server:
   servlet:
     context-path: "/public_api"
 
-spring:
-  profiles:
-    active: dev

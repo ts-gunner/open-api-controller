@@ -1,11 +1,10 @@
 package com.forty.wall.filters;
 
 
-import cn.hutool.core.text.AntPathMatcher;
 import cn.hutool.core.util.StrUtil;
 import com.forty.utils.PathUtils;
 import com.forty.wall.constant.CommonConstant;
-import com.forty.wall.utils.HostUtils;
+import com.forty.wall.utils.IpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -44,7 +43,7 @@ public class RequestLogFilter implements GlobalFilter, Ordered {
         boolean matchPath = PathUtils.isMatchPath(CommonConstant.DEFAULT_EXCLUDE_PATTERNS, path);
         if (matchPath) return chain.filter(exchange);
         // 请求地址
-        String ipAddress = HostUtils.getIpAddress(request);
+        String ipAddress = IpUtils.getIpAddress(request);
         // 请求时间
         Instant requestTime = Instant.now();
         ZonedDateTime zonedDateTime = requestTime.atZone(ZoneId.of("Asia/Shanghai"));

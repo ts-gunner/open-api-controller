@@ -7,4 +7,4 @@ spring:
       config:
         file-extension: yaml
         group: APPLICATION_CONFIGURATION
-        name: open-api-gateway
+        name: open-api-interface

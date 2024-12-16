@@ -7,7 +7,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Optional;
 
-public class HostUtils {
+public class IpUtils {
     private static final String IP_UNKNOWN = "unknown";
     private static final String IP_LOCAL = "127.0.0.1";
     private static final String IPV6_LOCAL = "0:0:0:0:0:0:0:1";
@@ -58,5 +58,6 @@ public class HostUtils {
         }
         return ipAddress;
     }
+
 
 }
