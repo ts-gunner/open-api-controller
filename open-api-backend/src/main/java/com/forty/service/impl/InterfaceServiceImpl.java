@@ -13,11 +13,9 @@ import com.forty.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.forty.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
 import com.forty.model.entity.InterfaceInfo;
 import com.forty.model.vo.InterfaceInfoVO;
-import com.forty.sdk.client.FortyClient;
 import com.forty.service.InterfaceService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,8 +24,6 @@ import java.util.List;
 public class InterfaceServiceImpl extends ServiceImpl<InterfaceInfoMapper, InterfaceInfo>
         implements InterfaceService {
 
-    @Autowired
-    FortyClient fortyClient;
 
     @Override
     public void addInterface(InterfaceInfoAddRequest request, String userAccount) {
@@ -118,25 +114,4 @@ public class InterfaceServiceImpl extends ServiceImpl<InterfaceInfoMapper, Inter
         return this.baseMapper.update(updateWrapper);
     }
 
-    @Override
-    public void publishInterface(int interfaceId) {
-        InterfaceInfo interfaceInfo = this.baseMapper.selectById(interfaceId);
-        if (interfaceInfo == null) throw new BusinessException(CodeStatus.DATA_NOT_EXIST, "接口不存在");
-
-        // 校验接口是否可用
-        String test = fortyClient.getName("test");
-        if (StringUtils.isBlank(test)) throw new BusinessException(CodeStatus.INTERFACE_CALL_FAILED, "接口响应失败");
-
-        interfaceInfo.setStatus(true);
-        this.updateById(interfaceInfo);
-    }
-
-    @Override
-    public void demiseInterface(int interfaceId) {
-        InterfaceInfo interfaceInfo = this.baseMapper.selectById(interfaceId);
-        if (interfaceInfo == null) throw new BusinessException(CodeStatus.DATA_NOT_EXIST, "接口不存在");
-
-        interfaceInfo.setStatus(false);
-        this.updateById(interfaceInfo);
-    }
 }

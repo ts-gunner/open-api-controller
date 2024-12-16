@@ -33,7 +33,7 @@ public class RoleAssignmentServiceImpl extends ServiceImpl<RoleAssignmentMapper,
     public Page<RoleAssignmentVO> getUserRoleMapVOList(RoleAssignmentQueryRequest request) {
         Page<RoleAssignmentVO> roleMapVOPage = new Page<>(request.getCurrentPage(), request.getPageSize());
         List<RoleAssignmentVO> userRoleMapList = this.baseMapper.getRoleAssignmentList(
-                roleMapVOPage, request.getUserAccount(), request.getRoleName()
+                roleMapVOPage, request.getUserAccount(), request.getRoleName(), null
         );
         roleMapVOPage.setRecords(userRoleMapList);
         roleMapVOPage.setTotal(userRoleMapList.size());

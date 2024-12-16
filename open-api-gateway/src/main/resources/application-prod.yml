@@ -1,0 +1,27 @@
+server:
+  port: 44388
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: api_interface_route
+          uri: http://127.0.0.1:44389
+          predicates:
+            - Path=/public_api/**
+        - id: open_api_controller_route
+          uri: http://127.0.0.1:44380
+          predicates:
+            - Path=/controller/**
+
+dubbo:
+  application:
+    name: dubbo-springboot-gateway-consumer
+    logger: slf4j
+  protocol:
+    name: tri
+    port: -1
+  registry:
+    id: nacos-registry
+    address: nacos://127.0.0.1:8848?username=nacos&password=nacos
+    group: dubbo

@@ -14,14 +14,7 @@ class OpenApiInterfaceApplicationTests {
 
     @Test
     void contextLoads() {
-        String result1 = fortyClient.getName("牛逼plus");
-        System.out.println(result1);
 
-
-        User user = new User();
-        user.setUserName("张xx是66");
-        String s = fortyClient.postName(user);
-        System.out.println(s);
     }
 
 }

@@ -32,10 +32,12 @@ public class AuthInterceptor implements HandlerInterceptor {
         try {
             Map<String, Object> map = JWTUtils.decrypt(token, settings.getSecretKey());
             data = JSON.parseObject(JSON.toJSONString(map), TokenData.class);
-            request.setAttribute("tokenData", data);
+            if (data == null) throw new BusinessException(CodeStatus.NO_AUTH);
         }catch (Exception e){
             throw new BusinessException(CodeStatus.NO_AUTH, "身份验证失败: " + e.getMessage());
         }
+
+        request.setAttribute("tokenData", data);
         // 校验用户是否满足所有角色
         verifyUserRequireRole(data.getRoles(), handler);
         // 校验用户是否满足其中一个角色即可

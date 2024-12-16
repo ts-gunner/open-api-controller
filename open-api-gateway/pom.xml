@@ -31,6 +31,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-circuitbreaker-reactor-resilience4j</artifactId>
         </dependency>
+
         <!-- Dubbo -->
         <dependency>
             <groupId>org.apache.dubbo</groupId>

@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: open-api-controller
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      server-addr: 192.168.5.100:8848
+      config:
+        file-extension: yaml
+        group: APPLICATION_CONFIGURATION
+        name: open-api-backend
+
+
+# 读取nacos中data id为 open-api-controller-dev.yaml的配置文件

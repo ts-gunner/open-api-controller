@@ -1,6 +1,7 @@
 package com.forty.wall.filters;
 
 
+import cn.hutool.core.net.Ipv4Util;
 import com.forty.wall.utils.HostUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -45,10 +46,10 @@ public class AccessControlFilter implements GlobalFilter, Ordered {
         ServerHttpResponse response = exchange.getResponse();
         List<String> IP_WHITE_LIST = whiteList == null ? DEFAULT_IP_WHITE_LIST :
                 Stream.concat(whiteList.stream(), DEFAULT_IP_WHITE_LIST.stream()).toList();
-        if (!IP_WHITE_LIST.contains(sourceIP) && !IP_WHITE_LIST.contains(realIP)) {
-            response.setStatusCode(HttpStatus.FORBIDDEN);
-            return response.setComplete();
-        }
+//        if (!IP_WHITE_LIST.contains(sourceIP) && !IP_WHITE_LIST.contains(realIP)) {
+//            response.setStatusCode(HttpStatus.FORBIDDEN);
+//            return response.setComplete();
+//        }
         return chain.filter(exchange);
     }
 

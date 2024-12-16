@@ -21,7 +21,4 @@ public interface InterfaceService extends IService<InterfaceInfo> {
 
     int updateInterface(InterfaceInfoUpdateRequest request);
 
-    void publishInterface(int interfaceId);
-
-    void demiseInterface(int interfaceId);
 }

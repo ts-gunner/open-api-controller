@@ -137,7 +137,7 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         List<UserVO> list = userInfoPage.getRecords().stream().map((record) -> {
             UserVO userVO = new UserVO();
             BeanUtils.copyProperties(record, userVO);
-            List<RoleAssignmentVO> roleAssignmentList = roleAssignmentMapper.getRoleAssignmentList(record.getUserAccount(), null);
+            List<RoleAssignmentVO> roleAssignmentList = roleAssignmentMapper.getRoleAssignmentList(record.getUserAccount(), null, null);
             List<String> roles = roleAssignmentList.stream().map(RoleAssignmentVO::getRoleName).toList();
             userVO.setRoles(roles);
             return userVO;

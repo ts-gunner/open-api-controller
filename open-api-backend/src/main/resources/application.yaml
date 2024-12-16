@@ -2,16 +2,17 @@ spring:
   application:
     name: open-api-controller
   profiles:
-    active: dev
+    active: prod
   jackson:
     #  格式化返回时间 yyyy-MM-dd HH:mm:ss
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
 
+
 server:
-  port: 8443
   servlet:
     context-path: "/controller"
+
 
 mybatis-plus:
   configuration:
@@ -37,23 +38,10 @@ knife4j:
   setting:
     language: zh_cn
 
-dubbo:
-  application:
-    name: dubbo-springboot-backend-provider
-    logger: slf4j
-  protocol:
-    name: tri
-    port: -1
-  registry:
-    id: nacos-registry
-    address: nacos://127.0.0.1:9002
 
 # 自定义配置
 setting:
   salt: forty
   secret-key: 55s9q11a!!4)s,1aA@DF(ScACX)A__=-sczc)dkD987s230a==
 
-forty:
-  client:
-    secretId: "e8de092f5f9e91f6d451870cfcf6133b3a16ec4c44751e432efd5463e380b946"
-    secretKey: ",.w[yI&aUCTxtV^FfDQQ>ASt2QZ*ie:%++h.1GD+"
+

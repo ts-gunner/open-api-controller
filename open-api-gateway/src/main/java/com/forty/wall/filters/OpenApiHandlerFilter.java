@@ -34,6 +34,7 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Objects;
 
 
 @Component
@@ -53,8 +54,15 @@ public class OpenApiHandlerFilter implements GlobalFilter, Ordered {
         if (!matchPath) return chain.filter(exchange);
         // 校验签名是否合法
         SecretInfo secretInfo = signVerification(exchange);
+
+        // 发布与在线调用的时候不需要校验且不需要统计调用次数
+        // todo: 当前跳过校验的逻辑写到SDK，有风险，不应该写在SDK中
+        if (Objects.equals(request.getHeaders().getFirst("test-api-skip-authorization"), "true")){
+            return chain.filter(exchange);
+        }
+
         // 校验该用户能否调用该接口（判断接口是否存在，判断接口状态是否开启状态）
-        BaseResponse verifyResult = interfaceInnerService.verifyInterfaceAvailable(secretInfo.getUserId(), 1);
+        BaseResponse<Integer> verifyResult = interfaceInnerService.verifyInterfaceAvailable(secretInfo.getUserId(), request.getURI().toString());
         if (verifyResult.getCode() != CodeStatus.SUCCESS.getCode()) {
             throw new BusinessException(CodeStatus.INTERFACE_CALL_FAILED, verifyResult.getMsg());
         }
@@ -65,31 +73,40 @@ public class OpenApiHandlerFilter implements GlobalFilter, Ordered {
             @Override
             public Mono<Void> writeWith(Publisher<? extends DataBuffer> body) {
                 if (body instanceof Flux) {
+                    StringBuilder stringBuilder = new StringBuilder();
+
                     Flux<? extends DataBuffer> fluxBody = (Flux<? extends DataBuffer>) body;
-                    return super.writeWith(fluxBody.map(dataBuffer -> {
+                    Mono<Void> voidMono = super.writeWith(fluxBody.map(dataBuffer -> {
                         // probably should reuse buffers
                         byte[] content = new byte[dataBuffer.readableByteCount()];
                         dataBuffer.read(content);
                         //释放掉内存
                         DataBufferUtils.release(dataBuffer);
                         String jsonStr = new String(content, Charset.forName("UTF-8"));
-                        BaseResponse responseData;
-                        try {
-                            responseData = JSONUtil.toBean(jsonStr, BaseResponse.class);
-                        }catch (Exception e){
-                            responseData = new BaseResponse(jsonStr);
-                        }
-                        if (this.getStatusCode().value() == HttpStatus.OK.value() && responseData.getCode() == HttpStatus.OK.value()){
-                            // 调用统计次数 + 1
-                            boolean callResult = interfaceInnerService.invokeInterfaceCount(secretInfo.getUserId(), 1);
-                            if (!callResult) throw new BusinessException(CodeStatus.INTERFACE_CALL_FAILED, "接口调用成功， 统计错误");
-                        }
+                        stringBuilder.append(jsonStr);
+
                         //TODO，s就是response的值，想修改、查看就随意而为了
-                        byte[] uppedContent = StringUtils.getBytes(JSONUtil.toJsonStr(responseData), StandardCharsets.UTF_8);
+                        byte[] uppedContent = StringUtils.getBytes(jsonStr, StandardCharsets.UTF_8);
                         return bufferFactory.wrap(uppedContent);
                     }));
+
+                    BaseResponse responseData;
+                    try {
+                        responseData = JSONUtil.toBean(stringBuilder.toString(), BaseResponse.class);
+                    }catch (Exception e){
+                        responseData = new BaseResponse(stringBuilder.toString());
+                    }
+                    if (this.getStatusCode().value() == HttpStatus.OK.value() && responseData.getCode() == HttpStatus.OK.value()){
+                        // 调用统计次数 + 1
+                        boolean callResult = interfaceInnerService.invokeInterfaceCount(secretInfo.getUserId(), verifyResult.getData());
+                        if (!callResult) throw new BusinessException(CodeStatus.INTERFACE_CALL_FAILED, "接口调用成功， 统计错误");
+                    }
+
+                    return voidMono;
+
                 }
                 // if body is not a flux. never got there.
+
                 return super.writeWith(body);
             }
         };

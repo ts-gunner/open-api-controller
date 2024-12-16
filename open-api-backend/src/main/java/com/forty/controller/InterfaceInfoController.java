@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.forty.annotation.RoleCheck;
 import com.forty.common.BaseResponse;
 import com.forty.common.CodeStatus;
+import com.forty.config.NacosConfig;
 import com.forty.exception.BusinessException;
 import com.forty.model.dto.interfaceinfo.InterfaceInfoAddRequest;
 import com.forty.model.dto.interfaceinfo.InterfaceInfoInvokeRequest;
@@ -17,6 +18,8 @@ import com.forty.model.entity.InterfaceInfo;
 import com.forty.model.entity.SecretInfo;
 import com.forty.model.entity.TokenData;
 import com.forty.model.vo.InterfaceInfoVO;
+import com.forty.sdk.adaptor.BaseAdaptor;
+import com.forty.sdk.adaptor.DailyHotAdaptor;
 import com.forty.sdk.client.FortyClient;
 import com.forty.service.InterfaceService;
 import com.forty.service.SecretInfoService;
@@ -41,6 +44,9 @@ public class InterfaceInfoController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    NacosConfig nacosConfig;
     /**
      * 接口的增删改查
      */
@@ -54,7 +60,6 @@ public class InterfaceInfoController {
     }
 
     @PostMapping("/query")
-    @RoleCheck(hasRoles = {"superadmin", "admin"})
     public BaseResponse<Page<InterfaceInfoVO>> queryInterfaceInfo(@RequestBody InterfaceInfoQueryRequest request) {
         Page<InterfaceInfoVO> interfaceInfoVOPage = interfaceService.queryInterface(request);
         return new BaseResponse<>(interfaceInfoVOPage);
@@ -62,7 +67,6 @@ public class InterfaceInfoController {
 
 
     @PostMapping("/queryAll")
-    @RoleCheck(hasRoles = {"superadmin", "admin"})
     public BaseResponse<List<InterfaceInfoVO>> queryAllInterfaceInfo(@RequestBody InterfaceInfoQueryRequest request) {
         QueryWrapper<InterfaceInfo> interfaceQueryWrapper = interfaceService.getInterfaceQueryWrapper(request);
         List<InterfaceInfo> list = interfaceService.list(interfaceQueryWrapper);
@@ -92,8 +96,20 @@ public class InterfaceInfoController {
      * @return
      */
     @GetMapping("/online")
+    @RoleCheck(hasRoles = {"admin", "superadmin"})
     public BaseResponse<Integer> publishInterface(@RequestParam("interfaceId") Integer interfaceId){
-        interfaceService.publishInterface(interfaceId);
+        InterfaceInfo interfaceInfo = interfaceService.getBaseMapper().selectById(interfaceId);
+        if (interfaceInfo == null) throw new BusinessException(CodeStatus.DATA_NOT_EXIST, "接口不存在");
+
+        FortyClient client = nacosConfig.getOpenApiUrl() != null ?
+                new FortyClient(nacosConfig.getSecretId(), nacosConfig.getSecretKey(), nacosConfig.getOpenApiUrl())
+                : new FortyClient(nacosConfig.getSecretId(), nacosConfig.getSecretKey());
+        // 校验接口是否可用
+        boolean testResult = client.adaptor(BaseAdaptor.class).testApiStatus(interfaceInfo.getUrl(), interfaceInfo.getMethod());
+        if (!testResult) throw new BusinessException(CodeStatus.INTERFACE_CALL_FAILED, "接口响应失败");
+
+        interfaceInfo.setStatus(true);
+        interfaceService.getBaseMapper().updateById(interfaceInfo);
         return new BaseResponse<>();
     }
 
@@ -105,8 +121,12 @@ public class InterfaceInfoController {
     @GetMapping("/offline")
     @RoleCheck(hasRoles = {"superadmin", "admin"})
     public BaseResponse<Integer> demiseInterface(@RequestParam("interfaceId") Integer interfaceId){
-        interfaceService.demiseInterface(interfaceId);
-        return new BaseResponse<>();
+        InterfaceInfo interfaceInfo = interfaceService.getBaseMapper().selectById(interfaceId);
+        if (interfaceInfo == null) throw new BusinessException(CodeStatus.DATA_NOT_EXIST, "接口不存在");
+
+        interfaceInfo.setStatus(false);
+        int result = interfaceService.getBaseMapper().updateById(interfaceInfo);
+        return new BaseResponse<>(result);
     }
 
     /**
@@ -125,10 +145,10 @@ public class InterfaceInfoController {
         if (secretObject == null) throw new BusinessException(CodeStatus.INTERFACE_CALL_FAILED, "没有密钥key，请先创建一个再试！");
         String secretKey = secretObject.getSecretKey();
         FortyClient client = new FortyClient(secretId, secretKey);
-        JSONObject jsonObject = JSONUtil.parseObj(request.getUserRequestParams());
-        return new BaseResponse<>(client.getName(jsonObject.getStr("name")));
+        // todo: 调用API
+        BaseResponse<Object> response = client.adaptor(BaseAdaptor.class).callApiOnline(interfaceInfo.getUrl(), interfaceInfo.getMethod());
+        System.out.println(response);
+        return response;
     }
-
-
 
 }

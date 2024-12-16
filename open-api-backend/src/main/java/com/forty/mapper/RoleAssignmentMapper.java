@@ -13,9 +13,10 @@ import java.util.List;
 public interface RoleAssignmentMapper extends BaseMapper<RoleAssignment> {
     List<RoleAssignmentVO> getRoleAssignmentList(
             IPage<RoleAssignmentVO> page,
-            String userAccount, String roleName
+            String userAccount, String roleName, Long userId
     );
 
-    List<RoleAssignmentVO> getRoleAssignmentList(String userAccount, String roleName);
+    List<RoleAssignmentVO> getRoleAssignmentList(String userAccount, String roleName, Long userId);
+
 
 }

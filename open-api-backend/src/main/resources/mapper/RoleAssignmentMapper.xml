@@ -26,6 +26,9 @@
       <if test="roleName != null and roleName != ''">
           AND user_role.role_name = #{roleName}
       </if>
+        <if test="userId != null and userId != ''">
+            AND role_assignment.user_id = #{userId}
+        </if>
     </where>
 
     </select>
