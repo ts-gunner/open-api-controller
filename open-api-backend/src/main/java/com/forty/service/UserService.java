@@ -9,6 +9,7 @@ import com.forty.model.entity.TokenData;
 import com.forty.model.entity.UserInfo;
 import com.forty.model.vo.LoginUserVO;
 import com.forty.model.vo.UserVO;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.catalina.User;
 
 public interface UserService extends IService<UserInfo> {
@@ -21,7 +22,7 @@ public interface UserService extends IService<UserInfo> {
      * @param userPassword 密码
      * @return token
      */
-    String userLogin(String userAccount, String userPassword);
+    String userLogin(String userAccount, String userPassword, HttpServletRequest request);
 
     UserInfo getUserByUserId(Long userId);
 

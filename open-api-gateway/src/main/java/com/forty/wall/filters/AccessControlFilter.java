@@ -1,6 +1,8 @@
 package com.forty.wall.filters;
 
 
+import com.forty.common.CodeStatus;
+import com.forty.exception.BusinessException;
 import com.forty.utils.IpAddressUtils;
 import com.forty.wall.config.NacosConfiguration;
 import com.forty.wall.utils.IpUtils;
@@ -57,6 +59,9 @@ public class AccessControlFilter implements GlobalFilter, Ordered {
             response.setStatusCode(HttpStatus.FORBIDDEN);
             return response.setComplete();
         }
+
+        reverseCrawls(exchange);
+
         return chain.filter(exchange);
     }
 
@@ -79,5 +84,17 @@ public class AccessControlFilter implements GlobalFilter, Ordered {
             }
         }
         return false;
+    }
+
+    /**
+     * 反爬虫
+     * 1. User-Agent
+     * 2. 如果来源于client，则跳过检测（todo）
+     */
+    public void reverseCrawls(ServerWebExchange exchange) {
+        ServerHttpRequest request = exchange.getRequest();
+        String userAgent = request.getHeaders().getFirst("User-Agent");
+        if (userAgent == null || userAgent.isEmpty()) throw new BusinessException(CodeStatus.CRAWL_ERROR);
+        if (userAgent.equals("client-sdk")) return;
     }
 }

@@ -13,14 +13,21 @@ import java.util.Map;
 
 public class ClientMain {
     public static void main(String[] args) {
-//        String secretId = "e8de092f5f9e91f6d451870cfcf6133b3a16ec4c44751e432efd5463e380b946"; // admin
-        String secretId = "2bcbb957b4503e688390e5068f44be32f9c64eb86bd041bf031c5707d1cd80c4"; // test4
-        String secretKey = "^f}19]oGx)IGdE]ny]JkhH1$Kv[-)QO0)S8(EIkN";
-        FortyClient client = new FortyClient(secretId, secretKey);
+        // online
+//        String secretId = "0b20b7aabfb1a8b6512360ed6903f219f3f09d6d5ebe509e98ceca16814a2ca6"; // test2
+//        String secretKey = ">O%@9XCm35^L)n[V)#9-ou0yrN&dO,*|4xszT<_^";
+
+        // location
+        String secretId = "e8de092f5f9e91f6d451870cfcf6133b3a16ec4c44751e432efd5463e380b946";  // admin
+        String secretKey = "GA)p}Y;ZG,vwol;r*6,^i,U@^U*3e|WppjxIUOP8";
+
+//        String openApiUrl = "http://192.168.5.100:44388";
+        String openApiUrl = "http://localhost:8445";
+        FortyClient client = new FortyClient(secretId, secretKey, openApiUrl);
         BaseResponse<Object> bilibiliHot = client.adaptor(DailyHotAdaptor.class).getBilibiliHot();
-        BaseResponse<Object> tiktok = client.adaptor(DailyHotAdaptor.class).getTiktokHot();
+//        BaseResponse<Object> tiktok = client.adaptor(DailyHotAdaptor.class).getTiktokHot();
         System.out.println(bilibiliHot);
-        System.out.println(tiktok);
+//        System.out.println(tiktok);
 //        client.adaptor(Chatbot.class).ask("who are you?");
 //        ClientMain.testBilibili();
     }

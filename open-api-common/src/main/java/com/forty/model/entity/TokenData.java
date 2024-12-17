@@ -9,6 +9,8 @@ import java.util.List;
 public class TokenData implements Serializable {
     private Long userId;
     private String userAccount;
+    private String userAgent;
+    private String ipAddr;
     private List<String> roles;
 
     private static final long serialVersionUID = 124311214L;

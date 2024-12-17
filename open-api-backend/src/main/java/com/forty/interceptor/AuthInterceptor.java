@@ -11,6 +11,7 @@ import com.forty.exception.BusinessException;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -24,6 +25,8 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Resource
     Settings settings;
 
+    @Resource
+    StringRedisTemplate stringRedisTemplate;
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("Authorization");
@@ -36,12 +39,14 @@ public class AuthInterceptor implements HandlerInterceptor {
         }catch (Exception e){
             throw new BusinessException(CodeStatus.NO_AUTH, "身份验证失败: " + e.getMessage());
         }
-
-        request.setAttribute("tokenData", data);
+        verifySingleSignOn(data);
         // 校验用户是否满足所有角色
         verifyUserRequireRole(data.getRoles(), handler);
         // 校验用户是否满足其中一个角色即可
         verifyUserHasRole(data.getRoles(), handler);
+
+        request.setAttribute("tokenData", data);
+
         return true;
     }
 
@@ -72,5 +77,19 @@ public class AuthInterceptor implements HandlerInterceptor {
                 if (!isHasRole) throw new BusinessException(CodeStatus.AUTH_ROLE_FAILED);
             }
         }
+    }
+
+    /**
+     * 判断用户是否在其他地方登录
+     */
+    public void verifySingleSignOn(TokenData data){
+        String redisDataString = (String)stringRedisTemplate.opsForHash().get("USER", String.valueOf(data.getUserId()));
+        TokenData redisTokenData = JSON.parseObject(redisDataString, TokenData.class);
+
+        // 如果校验的token里的user-agent跟redis里的不一样，则已经在其他地方登录
+        if (!redisTokenData.getUserAgent().equals(data.getUserAgent()) || !redisTokenData.getIpAddr().equals(data.getIpAddr())){
+            throw new BusinessException(CodeStatus.SIGN_AUTH_FAILED, "已在其他地方登录");
+        }
+
     }
 }

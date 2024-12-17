@@ -96,11 +96,11 @@ public class UserInterfaceServiceImpl extends ServiceImpl<UserInterfaceInfoMappe
             Optional<UserInterfaceVO> filterUserInterfaceVO = userInterfaceVOList.stream().filter(item -> item.getInterfaceId().equals(interfaceInfo.getId())).findFirst();
             if (filterUserInterfaceVO.isPresent()) {
                 UserInterfaceVO userInterfaceVO1 = filterUserInterfaceVO.get();
-                userInterfaceVO.setTotalCalls(userInterfaceVO1.getTotalCalls());
+                userInterfaceVO.setTotalCalls(interfaceInfo.getTotalCalls());
                 userInterfaceVO.setTotalCount(userInterfaceVO1.getTotalCount());
                 userInterfaceVO.setRemainCount(userInterfaceVO1.getRemainCount());
             } else {
-                userInterfaceVO.setTotalCalls(0L);
+                userInterfaceVO.setTotalCalls(interfaceInfo.getTotalCalls());
                 userInterfaceVO.setTotalCount(0);
                 userInterfaceVO.setRemainCount(0);
             }

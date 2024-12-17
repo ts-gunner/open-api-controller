@@ -11,5 +11,4 @@ spring:
         group: APPLICATION_CONFIGURATION
         name: open-api-backend
 
-
 # 读取nacos中data id为 open-api-controller-dev.yaml的配置文件

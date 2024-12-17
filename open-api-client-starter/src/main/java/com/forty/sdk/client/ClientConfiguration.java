@@ -37,6 +37,7 @@ public class ClientConfiguration {
         map.put("nonce", RandomUtil.randomNumbers(3));
         map.put("timestamp", String.valueOf(System.currentTimeMillis() / 1000));
         map.put("Content-Type", "application/json; charset=utf-8");
+        map.put("User-Agent", "client-sdk");
         return map;
     }
 

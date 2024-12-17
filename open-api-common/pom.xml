@@ -26,7 +26,7 @@
             <artifactId>mybatis-plus</artifactId>
             <version>3.5.9</version>
         </dependency>
-
+     
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>

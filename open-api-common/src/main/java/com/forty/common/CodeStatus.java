@@ -13,6 +13,7 @@ public enum CodeStatus {
     TOKEN_UNAVAILABLE(40101, "Token Unavailable"),
     INTERFACE_CALL_FAILED(401003, "Interface Call Failed"),
     DB_ERROR(50001, "DB Error"),
+    CRAWL_ERROR(50002, "Access Error -- crawls"),
     SYSTEM_ERROR(500, "System Error");
 
     private final int code;

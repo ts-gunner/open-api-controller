@@ -13,6 +13,7 @@ import com.forty.model.vo.UserVO;
 import com.forty.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -44,11 +45,11 @@ public class UserController {
      */
     @PostMapping("/login")
     @Operation(description = "用户登录， 返回token")
-    public BaseResponse<String> userLogin(@RequestBody UserLoginRequest request){
+    public BaseResponse<String> userLogin(@RequestBody UserLoginRequest request, HttpServletRequest httpServletRequest){
         if (request == null) throw new BusinessException(CodeStatus.PARAM_ERROR);
         String userAccount = request.getUserAccount();
         String password = request.getPassword();
-        String token = userService.userLogin(userAccount, password);
+        String token = userService.userLogin(userAccount, password, httpServletRequest);
         return new BaseResponse<>(token);
     }
 

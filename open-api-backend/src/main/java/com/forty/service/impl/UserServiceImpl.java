@@ -28,8 +28,13 @@ import com.forty.service.UserService;
 import com.forty.utils.EncryptUtils;
 import com.forty.utils.JWTUtils;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -51,6 +56,9 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
     @Resource
     SecretInfoMapper secretInfoMapper;
+
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
 
     public Long userRegister(String userAccount, String userPassword, String checkPassword) {
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
@@ -89,7 +97,7 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     }
 
     @Override
-    public String userLogin(String userAccount, String userPassword) {
+    public String userLogin(String userAccount, String userPassword, HttpServletRequest httpServletRequest) {
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_account", userAccount);
         UserInfo userInfo = this.baseMapper.selectOne(queryWrapper);
@@ -106,8 +114,16 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         tokenData.setUserAccount(userInfo.getUserAccount());
         tokenData.setUserId(userInfo.getId());
         tokenData.setRoles(roles);
+        // 额外添加ip和user-agent用以校验
+        String userAgent = httpServletRequest.getHeader("User-Agent");
+        tokenData.setUserAgent(userAgent);
+        tokenData.setIpAddr(httpServletRequest.getHeader("X-Forwarded-For"));
         Map map = JSON.parseObject(JSON.toJSONString(tokenData), Map.class);
-        return JWTUtils.encryptPersistent(map, settings.getSecretKey());
+        String token = JWTUtils.encryptPersistent(map, settings.getSecretKey());
+        HashOperations<String, String, String> hashOperations = stringRedisTemplate.opsForHash();
+        hashOperations.put("USER", String.valueOf(userInfo.getId()), JSON.toJSONString(tokenData));
+        hashOperations.put("USER_TOKEN", String.valueOf(userInfo.getId()), token);
+        return token;
     }
 
     @Override

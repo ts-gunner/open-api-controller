@@ -70,18 +70,19 @@ public class InterfaceInnerServiceImpl implements InterfaceInnerService {
         updateWrapper.eq("interface_id", interfaceId);
         updateWrapper.eq("user_id", userId);
         updateWrapper.eq("status", 1);
-        // 用户接口记录的总调用次数 + 1
-        updateWrapper.setSql("total_count = total_count + 1");
-        // 用户接口记录的剩余调用次数 - 1
-        updateWrapper.setSql("remain_count = remain_count - 1");
-        userInterfaceInfoMapper.update(updateWrapper);
-        // 接口总调用次数 + 1
-        UpdateWrapper<InterfaceInfo> interfaceInfoUpdateWrapper = new UpdateWrapper<>();
-        interfaceInfoUpdateWrapper.eq("id", interfaceId);
-        interfaceInfoUpdateWrapper.eq("status", 1);
-        interfaceInfoUpdateWrapper.setSql("total_calls = total_calls + 1");
-        interfaceService.update(interfaceInfoUpdateWrapper);
-
-        return true;
+        synchronized (this){
+            // 用户接口记录的总调用次数 + 1
+            updateWrapper.setSql("total_count = total_count + 1");
+            // 用户接口记录的剩余调用次数 - 1
+            updateWrapper.setSql("remain_count = remain_count - 1");
+            userInterfaceInfoMapper.update(updateWrapper);
+            // 接口总调用次数 + 1
+            UpdateWrapper<InterfaceInfo> interfaceInfoUpdateWrapper = new UpdateWrapper<>();
+            interfaceInfoUpdateWrapper.eq("id", interfaceId);
+            interfaceInfoUpdateWrapper.eq("status", 1);
+            interfaceInfoUpdateWrapper.setSql("total_calls = total_calls + 1");
+            interfaceService.update(interfaceInfoUpdateWrapper);
+            return true;
+        }
     }
 }
